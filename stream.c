@@ -18,39 +18,18 @@
 
 int main(int argc, char* argv[]) {
 
-	const int LENGTH = 2000;
+	const int LENGTH = 1024;
+	const int OFFSET = 0;
 
 	printf("Allocating arrays of size %d elements.\n", LENGTH);
-	double* a = (double*) malloc(sizeof(double) * LENGTH);
-	double* b = (double*) malloc(sizeof(double) * LENGTH);
-	double* c = (double*) malloc(sizeof(double) * LENGTH);
+	int* buf = (int*) malloc(sizeof(int) * LENGTH);
 	printf("Done allocating arrays.\n");
 
-	int i;
-	for(i = 0; i < LENGTH; ++i) {
-		a[i] = i;
-		b[i] = LENGTH - i;
-		c[i] = 0;
-	}
+	printf("Value at [%d] is [%d]...\n", OFFSET, buf[OFFSET]);
 
-	printf("Perfoming the fast_c compute loop...\n");
-	#pragma omp parallel for
-	for(i = 0; i < LENGTH; ++i) {
-		//printf("issuing a write to: %llu (fast_c)\n", ((unsigned long long int) &fast_c[i]));
-		c[i] = 2.0 * a[i] + 1.5 * b[i];
-	}
-
-	double sum = 0;
-	for(i = 0; i < LENGTH; ++i) {
-		sum += c[i];
-	}
-
-	printf("Sum of arrays is: %f\n", sum);
 	printf("Freeing arrays...\n");
 
-	free(a);
-	free(b);
-	free(c);
+	free(buf);
 
 	printf("Done.\n");
 }
