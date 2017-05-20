@@ -21,21 +21,12 @@ int main(int argc, char* argv[]) {
 	const int LENGTH = 1024;
 	const int OFFSET = 0;
 
-	printf("Allocating arrays of size %d elements.\n", LENGTH);
 	int* buf = (int*) malloc(sizeof(int) * LENGTH);
-	printf("Done allocating arrays.\n");
 
 	int i = 0;
-	int sum = 0;
 	for(i = 0; i < LENGTH; i++){
-		sum += buf[i];
+		buf[i] = i;
 	}
 
-	printf("Value at [%d] is [%d]...\n", OFFSET, buf[OFFSET]);
-
-	printf("Freeing arrays...\n");
-
 	free(buf);
-
-	printf("Done.\n");
 }
