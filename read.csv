@@ -1,108 +1,3 @@
-Configuring Ring Network-on-Chip...
-0
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-Configuring core and memory controller group 0...
-Creating Core 0 in Group 0
-Creating Core 1 in Group 0
-Creating Core 2 in Group 0
-Creating Core 3 in Group 0
-Creating Core 4 in Group 0
-Creating Core 5 in Group 0
-Creating Core 6 in Group 0
-Creating Core 7 in Group 0
-Creating Core 8 in Group 0
-Creating Core 9 in Group 0
-Creating Core 10 in Group 0
-Creating Core 11 in Group 0
-Creating Core 12 in Group 0
-Creating Core 13 in Group 0
-Creating Core 14 in Group 0
-Creating Core 15 in Group 0
-Creating L3 cache block: 0...
-Creating L3 cache block: 1...
-Completed configuring the SST Sandy Bridge model
-Initialized with 16 cores
-Before initialization 
-Assigning the PTW correctly
-Assigning the PTW correctly
-Assigning the PTW correctly
-Assigning the PTW correctly
-Assigning the PTW correctly
-Assigning the PTW correctly
-Assigning the PTW correctly
-Assigning the PTW correctly
-Assigning the PTW correctly
-Assigning the PTW correctly
-Assigning the PTW correctly
-Assigning the PTW correctly
-Assigning the PTW correctly
-Assigning the PTW correctly
-Assigning the PTW correctly
-Assigning the PTW correctly
-After initialization 
-ArielComponent[arielcpu.cc:52:ArielCPU] Creating Ariel component...
-ArielComponent[arielcpu.cc:55:ArielCPU] Configuring for 16 cores...
-ArielComponent[arielcpu.cc:58:ArielCPU] Configuring for check addresses = no
-ArielComponent[arielcpu.cc:86:ArielCPU] WARNING - ariel parameter name change: change 'memorylevels' to 'memmgr.memorylevels' in your input. The old parameter will continue to work for now but may not be supported in future releases.
-ArielComponent[arielcpu.cc:92:ArielCPU] WARNING - ariel parameter name change: change 'defaultlevel' to 'memmgr.defaultlevel' in your input. The old parameter will continue to work for now but may not be supported in future releases.
-ArielComponent[arielcpu.cc:104:ArielCPU] WARNING - ariel parameter name change: change 'pagesize0' to 'memmgr.pagesize0' in your input. The old parameter will continue to work for now but may not be supported in future releases.
-ArielComponent[arielcpu.cc:112:ArielCPU] WARNING - ariel parameter name change: change 'pagecount0' to 'memmgr.pagecount0' in your input. The old parameter will continue to work for now but may not be supported in future releases.
-ArielComponent[arielcpu.cc:140:ArielCPU] Loading memory manger: ariel.MemoryManagerSimple
-ArielComponent[arielcpu.cc:148:ArielCPU] Memory manager construction is completed.
-ArielComponent[arielcpu.cc:179:ArielCPU] Model specifies that there are 0 application arguments
-ArielComponent[arielcpu.cc:186:ArielCPU] Interception and re-instrumentation of multi-level memory calls is DISABLED.
-ArielComponent[arielcpu.cc:194:ArielCPU] Tracking the stack and dumping on malloc calls is DISABLED.
-ArielComponent[arielcpu.cc:199:ArielCPU] Base pipe name: /sst_shmem_19063-1-1804289383
-ArielComponent[arielcpu.cc:210:ArielCPU] Processing application arguments...
-ArielComponent[arielcpu.cc:313:ArielCPU] Completed processing application arguments.
-ArielComponent[arielcpu.cc:320:ArielCPU] Creating core to cache links...
-ArielComponent[arielcpu.cc:330:ArielCPU] Creating processor cores and cache links...
-ArielComponent[arielcpu.cc:333:ArielCPU] Configuring cores and cache links...
-ArielComponent[arielcpu.cc:357:ArielCPU] Registering ArielCPU clock at 2GHz
-ArielComponent[arielcpu.cc:361:ArielCPU] Clocks registered.
-ArielComponent[arielcpu.cc:369:ArielCPU] Completed initialization of the Ariel CPU.
-l2cache_0: No MSHR lookup latency provided (mshr_latency_cycles)...intrapolated to 2 cycles.
-l2cache_1: No MSHR lookup latency provided (mshr_latency_cycles)...intrapolated to 2 cycles.
-l2cache_2: No MSHR lookup latency provided (mshr_latency_cycles)...intrapolated to 2 cycles.
-l2cache_3: No MSHR lookup latency provided (mshr_latency_cycles)...intrapolated to 2 cycles.
-l2cache_4: No MSHR lookup latency provided (mshr_latency_cycles)...intrapolated to 2 cycles.
-l2cache_5: No MSHR lookup latency provided (mshr_latency_cycles)...intrapolated to 2 cycles.
-l2cache_6: No MSHR lookup latency provided (mshr_latency_cycles)...intrapolated to 2 cycles.
-l2cache_7: No MSHR lookup latency provided (mshr_latency_cycles)...intrapolated to 2 cycles.
-l2cache_8: No MSHR lookup latency provided (mshr_latency_cycles)...intrapolated to 1 cycles.
-l2cache_9: No MSHR lookup latency provided (mshr_latency_cycles)...intrapolated to 1 cycles.
-l2cache_10: No MSHR lookup latency provided (mshr_latency_cycles)...intrapolated to 1 cycles.
-l2cache_11: No MSHR lookup latency provided (mshr_latency_cycles)...intrapolated to 1 cycles.
-l2cache_12: No MSHR lookup latency provided (mshr_latency_cycles)...intrapolated to 1 cycles.
-l2cache_13: No MSHR lookup latency provided (mshr_latency_cycles)...intrapolated to 1 cycles.
-l2cache_14: No MSHR lookup latency provided (mshr_latency_cycles)...intrapolated to 1 cycles.
-l2cache_15: No MSHR lookup latency provided (mshr_latency_cycles)...intrapolated to 1 cycles.
-l3cache_0: No MSHR lookup latency provided (mshr_latency_cycles)...intrapolated to 3 cycles.
-l3cache_1: No MSHR lookup latency provided (mshr_latency_cycles)...intrapolated to 3 cycles.
-The value of tRCD is 300
-After initialization 
-SSTARIEL: Loading Ariel Tool to connect to SST on pipe: /sst_shmem_19063-1-1804289383 max instruction count: 1000000000 max core count: 16
-SSTARIEL: Function profiling is disabled.
-ArielComponent[arielcpu.cc:377:init] Launching PIN...
-ArielComponent[arielcpu.cc:382:init] Returned from launching PIN.  Waiting for child to attach.
-ArielComponent[arielcpu.cc:385:init] Child has attached!
 read,0,2624
 read,0,7744
 read,0,2560
@@ -2334,13 +2229,6 @@ read,24,204288
 read,24,204352
 read,24,204416
 read,21,178176
-rAllocating arrays of size 1024 elements.
-Done allocating arrays.
-Value at [0] is [0]...
-Freeing arrays...
-Done.
-SSTARIEL: Execution completed, shutting down.
-ead,24,204480
 read,24,204544
 read,24,204608
 read,24,204672
@@ -2510,15 +2398,3 @@ read,2,285056
 read,10,86464
 read,10,87616
 read,10,87680
-CORE ID: 0 PROCESSED AN EXIT EVENT
-ArielComponent[arielcpu.cc:394:finish] Ariel Processor Information:
-ArielComponent[arielcpu.cc:395:finish] Completed at: 400483 nanoseconds.
-ArielComponent[arielcpu.cc:396:finish] Ariel Component Statistics (By Core)
-
-Ariel Memory Management Statistics:
----------------------------------------------------------------------
-Page Table Sizes:
-- Map entries         74
-Page Table Coverages:
-- Bytes               303104
-Simulation is complete, simulated time: 400.483 us

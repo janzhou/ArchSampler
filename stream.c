@@ -25,6 +25,12 @@ int main(int argc, char* argv[]) {
 	int* buf = (int*) malloc(sizeof(int) * LENGTH);
 	printf("Done allocating arrays.\n");
 
+	int i = 0;
+	int sum = 0;
+	for(i = 0; i < LENGTH; i++){
+		sum += buf[i];
+	}
+
 	printf("Value at [%d] is [%d]...\n", OFFSET, buf[OFFSET]);
 
 	printf("Freeing arrays...\n");
