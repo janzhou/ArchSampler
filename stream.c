@@ -18,8 +18,7 @@
 
 int main(int argc, char* argv[]) {
 
-	const int LENGTH = 1024;
-	const int OFFSET = 0;
+	const int LENGTH = 1024*1024;
 
 	int* buf = (int*) malloc(sizeof(int) * LENGTH);
 
@@ -27,6 +26,12 @@ int main(int argc, char* argv[]) {
 	for(i = 0; i < LENGTH; i++){
 		buf[i] = i;
 	}
+	int sum = 0;
+	for(i = 0; i < LENGTH; i++){
+		sum += buf[i];
+	}
+
+	printf("%d\n", sum);
 
 	free(buf);
 }
