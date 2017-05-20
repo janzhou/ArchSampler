@@ -17,9 +17,9 @@ clock = "2GHz"
 memory_clock = "200MHz"
 coherence_protocol = "MESI"
 
-cores_per_group = 2*2 #2 cores and 2 MMUs
+cores_per_group = 8*2 #2 cores and 2 MMUs
 memory_controllers_per_group = 1
-groups = 4
+groups = 1
 
 os.environ['OMP_NUM_THREADS'] = str(cores_per_group * groups/2)
 
