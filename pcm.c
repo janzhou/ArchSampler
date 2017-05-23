@@ -14,8 +14,19 @@ void *pcm_thread_func(void *data)
 
 void pcm_threads_spawn(struct pcm_thread * pcm_threads, int num_threads){
 	int i;
+	printf("num_threads %d\n", num_threads);
 	for(i = 0; i < num_threads; i++){
 		struct pcm_thread * pth = pcm_threads + i;
 		pthread_create(&pth->pthread, NULL, pcm_thread_func, pth);
+	}
+}
+
+void pcm_threads_join(struct pcm_thread pcm_threads[], int num_threads)
+{
+	int i;
+
+	for (i = 0; i < num_threads; i++) {
+		struct pcm_thread * pth = pcm_threads + i;
+		pthread_join(pth->pthread, NULL);
 	}
 }

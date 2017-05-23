@@ -25,5 +25,6 @@ struct pcm_thread {
 };
 
 void pcm_threads_spawn(struct pcm_thread pcm_threads[], int num_threads);
+void pcm_threads_join(struct pcm_thread pcm_threads[], int num_threads);
 
 #endif /* PCM_H_ */

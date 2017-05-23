@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 void fn(void* row){
+	printf("fn\n");
 }
 
 int main(int argc, char* argv[]) {
@@ -25,5 +26,6 @@ int main(int argc, char* argv[]) {
 	}
 
 	pcm_threads_spawn(pcm_threads, PCM_NUM_BANKS);
+	pcm_threads_join(pcm_threads, PCM_NUM_BANKS);
 	free(buf);
 }
