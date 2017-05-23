@@ -1,11 +1,14 @@
 CXX=g++ 
 
-stream.exe: stream.o
-	$(CXX) -O3 -o stream.exe -fopenmp stream.o
+stream.exe: stream.o pcm.o
+	$(CXX) -O3 -o $@ -fopenmp $^
 
-stream.o: stream.c
-	$(CXX) -O3 -o stream.o -fopenmp -c stream.c
+multi_threads.exe: multi_threads.o pcm.o
+	$(CXX) -O3 -fopenmp $^
+
+%.o: %.c pcm.h
+	$(CXX) -O3 -fopenmp -c $<
 
 clean:
-	rm stream stream.o
+	rm *.exe *.o
 

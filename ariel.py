@@ -251,7 +251,7 @@ messier_params = {
       "tCL_W" : 1000,
       "write_buffer_size" : 32,
       "flush_th" : 90,
-      "num_banks" : 32,
+      "num_banks" : 1,
       "max_outstanding" : run_num,
       "max_writes" : "4",
       "max_current_weight" : 32*50,
