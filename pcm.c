@@ -3,11 +3,15 @@
 void *pcm_thread_func(void *data)
 {
 	struct pcm_thread *pcm_thread = (struct pcm_thread *) data;
+	unsigned long local_cnt = 0;
 
 	int i;
 	for(i = 0; i < pcm_thread->num_rows; i++){
-		pcm_thread->fn(pcm_thread->rows[i]);
+//		pcm_thread->fn(pcm_thread->rows[i]);
+		local_cnt += pcm_movie_db_cnt_local(pcm_thread->rows[i]);
 	}
+
+	pcm_movie_db_cnt_global(local_cnt);
 
 	pthread_exit(0);
 }

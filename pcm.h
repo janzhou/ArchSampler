@@ -10,13 +10,15 @@
 #include <semaphore.h>
 #include <errno.h>
 
+#include "app.h"
+
 #define PCM_NUM_BANKS		4
 //#define PCM_ROWS_PER_BANK	(1024 * 32)
-#define PCM_ROWS_PER_BANK	(1024 * 1)
+#define PCM_ROWS_PER_BANK	(1024 * 32)
 #define PCM_ROW_SIZE		(1024 * 8)
 #define PCM_BANK_SIZE		(PCM_ROWS_PER_BANK * PCM_ROW_SIZE)
 #define PCM_NUM_ROWS		(PCM_NUM_BANKS * PCM_ROWS_PER_BANK)
-#define PCM_SIZE		(PCM_NUM_BANKS * PCM_ROWS_PER_BANK * PCM_ROW_SIZE) 
+#define PCM_SIZE		(PCM_NUM_ROWS * PCM_ROW_SIZE)
 
 struct pcm_thread {
 	pthread_t pthread;
