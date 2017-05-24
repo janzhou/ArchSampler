@@ -1,9 +1,8 @@
 CXX=g++ 
 
-stream.exe: stream.o pcm.o
-	$(CXX) -O3 -o $@ -fopenmp $^
+all: stream.exe multi_threads.exe
 
-multi_threads.exe: multi_threads.o pcm.o
+%.exe: %.o pcm.o
 	$(CXX) -O3 -o $@ -fopenmp $^
 
 %.o: %.c pcm.h

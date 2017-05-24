@@ -11,8 +11,9 @@
 #include <errno.h>
 
 #define PCM_NUM_BANKS		4
-#define PCM_ROWS_PER_BANK	1024
-#define PCM_ROW_SIZE		(8 * 1024)
+//#define PCM_ROWS_PER_BANK	(1024 * 32)
+#define PCM_ROWS_PER_BANK	(1024 * 8)
+#define PCM_ROW_SIZE		(1024 * 8)
 #define PCM_BANK_SIZE		(PCM_ROWS_PER_BANK * PCM_ROW_SIZE)
 #define PCM_NUM_ROWS		(PCM_NUM_BANKS * PCM_ROWS_PER_BANK)
 #define PCM_SIZE		(PCM_NUM_BANKS * PCM_ROWS_PER_BANK * PCM_ROW_SIZE) 

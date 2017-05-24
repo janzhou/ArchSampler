@@ -12,7 +12,8 @@ next_network_id = 0
 next_memory_ctrl_id = 0
 next_l3_cache_id = 0
 
-Executable = "./stream.exe"
+#Executable = "./stream.exe"
+Executable = "./multi_threads.exe"
 clock = "2GHz"
 memory_clock = "200MHz"
 coherence_protocol = "MESI"
@@ -251,7 +252,7 @@ messier_params = {
       "tCL_W" : 1000,
       "write_buffer_size" : 32,
       "flush_th" : 90,
-      "num_banks" : 1,
+      "num_banks" : 4,
       "max_outstanding" : run_num,
       "max_writes" : "4",
       "max_current_weight" : 32*50,
