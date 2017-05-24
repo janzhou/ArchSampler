@@ -9,5 +9,8 @@ struct movie_db {
 };
 
 int pcm_movie_db_init(char *buf, char *file);
+unsigned long pcm_movie_db_cnt_local(void *row);
+void pcm_movie_db_cnt_global(unsigned long local_cnt);
+unsigned long pcm_movie_db_get_global_cnt();
 
 #endif /* APP_H_ */

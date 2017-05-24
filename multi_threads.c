@@ -69,6 +69,8 @@ int main(int argc, char* argv[]) {
 
 	gettimeofday(&t2, NULL);
 	execution_time = ((t2.tv_sec * 1000000 + t2.tv_usec) - (t1.tv_sec * 1000000 + t1.tv_usec)) / (float) 1000;
+
+	printf("Movie db element count: %lu\n", pcm_movie_db_get_global_cnt());
 	printf("Time taken: %.2f ms\n", execution_time);
 
 	free(buf);
