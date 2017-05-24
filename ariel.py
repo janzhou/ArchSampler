@@ -139,7 +139,7 @@ ariel.addParams({
     "pagecount0" : num_pages,
     "pagesize0" : page_size * 1024,
     "defaultlevel" : 0,
-    "arielmode" : 1, # IMPORTANT: Assumes your application has an "ariel_enable()" in it, otherwise change to 1 (no enable - start simulation immediately) or 2 (auto-detect)
+    "arielmode" : 0, # IMPORTANT: Assumes your application has an "ariel_enable()" in it, otherwise change to 1 (no enable - start simulation immediately) or 2 (auto-detect)
     "max_insts" : 100000000,
 # ARGUMENTS
 #    "appargcount" : 4,

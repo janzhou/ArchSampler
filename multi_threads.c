@@ -1,4 +1,5 @@
 #include "pcm.h"
+#include "arielapi.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -45,6 +46,7 @@ int main(int argc, char* argv[]) {
 		pth->fn = write;
 	}
 
+	ariel_enable();
 	pcm_threads_spawn(pcm_threads, PCM_NUM_BANKS);
 	pcm_threads_join(pcm_threads, PCM_NUM_BANKS);
 
