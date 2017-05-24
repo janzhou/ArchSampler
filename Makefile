@@ -1,16 +1,17 @@
-CXX=g++
-OUT=pcm
-INCLUDE_PATH = ${HOME}/local/sstelements-7.0.0/include/sst/elements/ariel
-LIBS_PATH= ${HOME}/local/sstelements-7.0.0/lib/sst-elements-library
-LIBS= -lpthread -larielapi
+CXX=g++ 
+INCLUDE_PATH = ${SST_ELEMENTS_HOME}/include/sst/elements/ariel
+LIBS_PATH= ${SST_ELEMENTS_HOME}/sstelements-7.0.0/lib/sst-elements-library
+#LIBS= -lpthread -fopenmp
+LIBS= -fopenmp
 
-all: pcm
+all: stream.exe multi_threads.exe
 
-pcm: pcm.c pcm.h app.c app.h multi_threads.c
-	$(CXX) -O0 -o $(OUT) pcm.c app.c multi_threads.c\
-	 -L$(LIBS_PATH) $(LIBS)\
-	  -I$(INCLUDE_PATH)
+%.exe: %.o pcm.o arielapi.o app.o
+	$(CXX) $(LIBS) -L$(LIBS_PATH) -I$(INCLUDE_PATH) -o $@ $^
+
+%.o: %.c pcm.h arielapi.h app.h
+	$(CXX) $(LIBS) -L$(LIBS_PATH) -I$(INCLUDE_PATH) -o $@ -c $<
 
 clean:
-	rm -f $(OUT)
+	rm -f *.exe *.o
 
