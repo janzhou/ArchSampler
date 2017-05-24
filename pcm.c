@@ -7,11 +7,12 @@ void *pcm_thread_func(void *data)
 
 	int i;
 	for(i = 0; i < pcm_thread->num_rows; i++){
-//		pcm_thread->fn(pcm_thread->rows[i]);
-		local_cnt += pcm_movie_db_cnt_local(pcm_thread->rows[i]);
+		if(pcm_thread->count_fn != NULL){
+			pcm_thread->count += pcm_thread->count_fn(pcm_thread->rows[i]);
+		} else if(pcm_thread->fn != NULL){
+			pcm_thread->fn(pcm_thread->rows[i]);
+		}
 	}
-
-	pcm_movie_db_cnt_global(local_cnt);
 
 	pthread_exit(0);
 }

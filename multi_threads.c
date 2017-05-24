@@ -55,17 +55,16 @@ int main(int argc, char* argv[]) {
 
 	gettimeofday(&t1, NULL);
 
-	for(b = 0; b < PCM_NUM_BANKS; b++) {
-		struct pcm_thread * pth = pcm_threads + b;
-		pth->fn = write;
-	}
+	pcm_threads_map_count_fn(pcm_threads, PCM_NUM_BANKS, pcm_movie_db_cnt_local);
 
 	if (pcm_movie_db_init(buf, argv[1]))
 		return errno;
 
-//	ariel_enable();
+	ariel_enable();
+
 	pcm_threads_spawn(pcm_threads, PCM_NUM_BANKS);
 	pcm_threads_join(pcm_threads, PCM_NUM_BANKS);
+	pcm_threads_reduce_count_fn(pcm_threads, PCM_NUM_BANKS, pcm_movie_db_cnt_global);
 
 	gettimeofday(&t2, NULL);
 	execution_time = ((t2.tv_sec * 1000000 + t2.tv_usec) - (t1.tv_sec * 1000000 + t1.tv_usec)) / (float) 1000;
