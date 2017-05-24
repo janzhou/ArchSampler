@@ -1,6 +1,5 @@
 #include "pcm.h"
 #include "movie.h"
-#include "arielapi.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,10 +28,8 @@ int main(int argc, char* argv[]) {
 	printf("Total memory allocated = %d\n", PCM_SIZE);
 
 	for(r = 0; r < PCM_NUM_ROWS; r++) {
-		int b = r % PCM_NUM_BANKS;
-		struct pcm_thread * pth = pcm_threads + b;
-		pth->rows[pth->num_rows] = buf + r * PCM_ROW_SIZE;
-		pth->num_rows++;
+		int bank = PCM_R2B(r);
+        pcm_thread_add_row(pcm_threads + bank, buf, r);
 	}
 
 	gettimeofday(&t1, NULL);
@@ -41,8 +38,6 @@ int main(int argc, char* argv[]) {
 
 	if (pcm_movie_db_init(buf, argv[1]))
 		return errno;
-
-	ariel_enable();
 
 	pcm_threads_spawn(pcm_threads, PCM_NUM_BANKS);
 	pcm_threads_join(pcm_threads, PCM_NUM_BANKS);
