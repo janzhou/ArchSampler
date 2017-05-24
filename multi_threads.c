@@ -24,8 +24,8 @@ void read(void* row){
 }
 
 int main(int argc, char* argv[]) {
-	struct pcm_thread pcm_threads[PCM_NUM_BANKS];
 	char* buf = (char *) malloc(PCM_SIZE);
+	struct pcm_thread pcm_threads[PCM_NUM_BANKS];
 
 	struct timeval t1, t2;
 	float execution_time;
@@ -47,17 +47,7 @@ int main(int argc, char* argv[]) {
 
 	pcm_threads_spawn(pcm_threads, PCM_NUM_BANKS);
 	pcm_threads_join(pcm_threads, PCM_NUM_BANKS);
-	gettimeofday(&t2, NULL);
-	execution_time = ((t2.tv_sec * 1000000 + t2.tv_usec) - (t1.tv_sec * 1000000 + t1.tv_usec)) / (float) 1000;
-	printf("Time taken: %.2f ms\n", execution_time);
 
-	for(b = 0; b < PCM_NUM_BANKS; b++) {
-		struct pcm_thread * pth = pcm_threads + b;
-		pth->fn = read;
-	}
-
-	pcm_threads_spawn(pcm_threads, PCM_NUM_BANKS);
-	pcm_threads_join(pcm_threads, PCM_NUM_BANKS);
 	gettimeofday(&t2, NULL);
 	execution_time = ((t2.tv_sec * 1000000 + t2.tv_usec) - (t1.tv_sec * 1000000 + t1.tv_usec)) / (float) 1000;
 	printf("Time taken: %.2f ms\n", execution_time);
