@@ -1,4 +1,5 @@
 #include "pcm.h"
+#include "movie.h"
 
 sem_t n_ele_lock;
 unsigned long n_elements;

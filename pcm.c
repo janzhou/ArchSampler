@@ -3,7 +3,6 @@
 void *pcm_thread_func(void *data)
 {
 	struct pcm_thread *pcm_thread = (struct pcm_thread *) data;
-	unsigned long local_cnt = 0;
 
 	int i;
 	for(i = 0; i < pcm_thread->num_rows; i++){

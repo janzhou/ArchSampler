@@ -1,28 +1,10 @@
 #include "pcm.h"
+#include "movie.h"
 #include "arielapi.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
-
-void write(void* row){
-	int i = 0;
-	int *buf = (int *) row;
-	for(i = 0; i < PCM_ROW_SIZE/sizeof(int); i++){
-		buf[i] = i;
-	}
-}
-
-void read(void* row){
-	int i = 0;
-	int *buf = (int *) row;
-	int sum = 0;
-	for(i = 0; i < PCM_ROW_SIZE/sizeof(int); i++){
-		sum += buf[i];
-	}
-
-	//printf("%d\n", sum);
-}
 
 int main(int argc, char* argv[]) {
 	char* buf;

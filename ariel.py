@@ -4,16 +4,16 @@ import os
 
 import sys
 
-run_num = int(sys.argv[1])
-suff = str(sys.argv[2])
+exe = str(sys.argv[1])
+num_banks = int(sys.argv[2])
 
+max_outstanding = 64
 next_core_id = 0
 next_network_id = 0
 next_memory_ctrl_id = 0
 next_l3_cache_id = 0
 
-#Executable = "./stream.exe"
-Executable = "./multi_threads.exe"
+Executable = "./" + str(exe)
 clock = "2GHz"
 memory_clock = "200MHz"
 coherence_protocol = "MESI"
@@ -139,14 +139,11 @@ ariel.addParams({
     "pagecount0" : num_pages,
     "pagesize0" : page_size * 1024,
     "defaultlevel" : 0,
-    "arielmode" : 0, # IMPORTANT: Assumes your application has an "ariel_enable()" in it, otherwise change to 1 (no enable - start simulation immediately) or 2 (auto-detect)
+    "arielmode" : 1, # IMPORTANT: Assumes your application has an "ariel_enable()" in it, otherwise change to 1 (no enable - start simulation immediately) or 2 (auto-detect)
     "max_insts" : 100000000,
 # ARGUMENTS
-#    "appargcount" : 4,
-#    "apparg0" : "-s",
-#    "apparg1": "small",
-#    "apparg2" : "-t",
-#    "apparg3": "8",
+    "appargcount" : 1,
+    "apparg0" : "../ml-20m/ratings.csv",
     "executable" : Executable
 })
 
@@ -252,8 +249,8 @@ messier_params = {
       "tCL_W" : 1000,
       "write_buffer_size" : 32,
       "flush_th" : 90,
-      "num_banks" : 4,
-      "max_outstanding" : run_num,
+      "num_banks" : num_banks,
+      "max_outstanding" : max_outstanding,
       "max_writes" : "4",
       "max_current_weight" : 32*50,
       "read_weight" : "5",
@@ -439,7 +436,7 @@ sst.enableAllStatisticsForAllComponents({"type":"sst.AccumulatorStatistic"})
 
 sst.setStatisticOutput("sst.statOutputCSV")
 sst.setStatisticOutputOptions( {
-	"filepath"  : "STATS/stats-snb-ariel-dram-mmu_w4_"+str(suff) + "_" + str(run_num) +".csv",
+	"filepath"  : "STATS/"+str(exe) + "_" + str(num_banks) +".csv",
 	"separator" : ", "
 } )
 
