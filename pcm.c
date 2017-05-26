@@ -18,6 +18,7 @@ void pcm_param(int argc, char* argv[]) {
 		exit(-1);
 	}
 
+	printf("PCM_NUM_BANKS: %d;\nPCM_ROWS_PER_BANK: %d;\nPCM_SIZE: %dMB;\n", PCM_NUM_BANKS, PCM_ROWS_PER_BANK, PCM_SIZE/(1024*1024));
 }
 
 void *pcm_thread_func(void *data)
