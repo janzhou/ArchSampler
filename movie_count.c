@@ -16,11 +16,6 @@ int main(int argc, char* argv[]) {
 
 	int r, b;
 
-	if (argc != 2) {
-		printf("Usage: pcm <input_file>\n");
-		return 0;
-	}
-
 	buf = (char *) calloc(1, PCM_SIZE);
 	if (!buf) {
 		perror("Failed to allocate the memory:");
@@ -38,7 +33,7 @@ int main(int argc, char* argv[]) {
 
 	pcm_threads_map_count_fn(pcm_threads, PCM_NUM_BANKS, pcm_movie_db_cnt_local);
 
-	if (pcm_movie_db_init(buf, argv[1]))
+	if (pcm_movie_db_init(buf, "data/ml-20m/ratings.csv"))
 		return errno;
 
 	pcm_threads_spawn(pcm_threads, PCM_NUM_BANKS);
