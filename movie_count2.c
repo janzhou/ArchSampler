@@ -25,9 +25,10 @@ int main(int argc, char* argv[]) {
 		return errno;
 	}
 
-	for(r = 0; r < PCM_NUM_ROWS; r++) {
-		int bank = PCM_R2B(r);
-		pcm_thread_add_row(pcm_threads + bank, buf, r);
+	for(b = 0; b < PCM_NUM_BANKS; b++) {
+		for(r = PCM_ROWS_PER_BANK * b; r < PCM_ROWS_PER_BANK * b + PCM_ROWS_PER_BANK; r++) {
+			pcm_thread_add_row(pcm_threads + b, buf, r);
+		}
 	}
 
 	pcm_threads_map_count_fn(pcm_threads, PCM_NUM_BANKS, pcm_movie_db_cnt_local);
