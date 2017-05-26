@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <sys/time.h>
 
-void write(void* row){
+void write_fn(void* row){
 	int i = 0;
 	int *buf = (int *) row;
 	for(i = 0; i < PCM_ROW_SIZE/sizeof(int); i++){
@@ -33,7 +33,7 @@ int main(int argc, char* argv[]) {
 
 	for(b = 0; b < PCM_NUM_BANKS; b++) {
 		struct pcm_thread * pth = pcm_threads + b;
-		pth->fn = write;
+		pth->fn = write_fn;
 	}
 
 	pcm_threads_spawn(pcm_threads, PCM_NUM_BANKS);

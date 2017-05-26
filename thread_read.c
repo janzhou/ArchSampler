@@ -1,16 +1,19 @@
 #include "pcm.h"
+#include "arielapi.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
 
-void read(void* row){
+void read_fn(void* row){
 	int i = 0;
 	int *buf = (int *) row;
 	int sum = 0;
 	for(i = 0; i < PCM_ROW_SIZE/sizeof(int); i++){
 		sum += buf[i];
 	}
+
+	printf("%d\n", sum);
 }
 
 int main(int argc, char* argv[]) {
@@ -34,8 +37,11 @@ int main(int argc, char* argv[]) {
 
 	for(b = 0; b < PCM_NUM_BANKS; b++) {
 		struct pcm_thread * pth = pcm_threads + b;
-		pth->fn = read;
+		pth->fn = read_fn;
 	}
+
+
+	ariel_enable();
 
 	pcm_threads_spawn(pcm_threads, PCM_NUM_BANKS);
 	pcm_threads_join(pcm_threads, PCM_NUM_BANKS);

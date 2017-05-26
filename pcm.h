@@ -37,40 +37,19 @@ struct pcm_thread {
 
 void pcm_param(int argc, char* argv[]);
 
-inline void pcm_thread_add_row(struct pcm_thread * pth, void * base, int row) {
-    pth->rows[pth->num_rows] = PCM_R2P(base, row);
-    pth->num_rows++;
-}
-
-inline void pcm_threads_map_fn(
+void pcm_thread_add_row(struct pcm_thread * pth, void * base, int row);
+void pcm_threads_map_fn(
 		struct pcm_thread pcm_threads[], int num_threads,
 		void (* fn)(void *row)
-		) {
-	int i;
-	for(i = 0; i < num_threads; i++) {
-		pcm_threads[i].fn = fn;
-	}
-}
-
-inline void pcm_threads_map_count_fn(
+		);
+void pcm_threads_map_count_fn(
 		struct pcm_thread pcm_threads[], int num_threads,
 		unsigned long (* count_fn)(void *row)
-		) {
-	int i;
-	for(i = 0; i < num_threads; i++) {
-		pcm_threads[i].count_fn = count_fn;
-	}
-}
-
-inline void pcm_threads_reduce_count_fn(
+		);
+void pcm_threads_reduce_count_fn(
 		struct pcm_thread pcm_threads[], int num_threads,
 		void (* count_reduce)(unsigned long count)
-		){
-	int i;
-	for(i = 0; i < num_threads; i++) {
-		count_reduce(pcm_threads[i].count);
-	}
-}
+		);
 
 void pcm_threads_spawn(struct pcm_thread pcm_threads[], int num_threads);
 void pcm_threads_join(struct pcm_thread pcm_threads[], int num_threads);

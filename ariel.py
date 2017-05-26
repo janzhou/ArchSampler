@@ -140,7 +140,7 @@ ariel.addParams({
     "pagecount0" : num_pages,
     "pagesize0" : page_size * 1024,
     "defaultlevel" : 0,
-    "arielmode" : 1,
+    "arielmode" : 0,
     "max_insts" : 100000000,
 # ARGUMENTS
     "appargcount" : 2,
