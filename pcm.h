@@ -10,9 +10,11 @@
 #include <semaphore.h>
 #include <errno.h>
 
-#define PCM_NUM_BANKS		4
-//#define PCM_ROWS_PER_BANK	(1024 * 32)
-#define PCM_ROWS_PER_BANK	(1024 * 4)
+extern int PCM_NUM_BANKS;
+extern int PCM_ROWS_PER_BANK;
+
+#define PCM_NUM_BANKS_MAX	32
+#define PCM_ROWS_PER_BANK_MAX	(1024 * 4)
 #define PCM_ROW_SIZE		(1024 * 8)
 #define PCM_BANK_SIZE		(PCM_ROWS_PER_BANK * PCM_ROW_SIZE)
 #define PCM_NUM_ROWS		(PCM_NUM_BANKS * PCM_ROWS_PER_BANK)
@@ -30,7 +32,7 @@ struct pcm_thread {
 	unsigned long count;
 	void (* fn)(void *row);
 	int num_rows;
-	void * rows[PCM_ROWS_PER_BANK];
+	void * rows[PCM_ROWS_PER_BANK_MAX];
 };
 
 inline void pcm_thread_add_row(struct pcm_thread * pth, void * base, int row) {

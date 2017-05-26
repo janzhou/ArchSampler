@@ -1,5 +1,8 @@
 #include "pcm.h"
 
+int PCM_NUM_BANKS = PCM_NUM_BANKS_MAX;
+int PCM_ROWS_PER_BANK = PCM_ROWS_PER_BANK_MAX;
+
 void *pcm_thread_func(void *data)
 {
 	struct pcm_thread *pcm_thread = (struct pcm_thread *) data;
