@@ -35,11 +35,12 @@ struct pcm_thread {
 	void * rows[PCM_ROWS_PER_BANK_MAX];
 };
 
+void pcm_param(int argc, char* argv[]);
+
 inline void pcm_thread_add_row(struct pcm_thread * pth, void * base, int row) {
     pth->rows[pth->num_rows] = PCM_R2P(base, row);
     pth->num_rows++;
 }
-
 
 inline void pcm_threads_map_fn(
 		struct pcm_thread pcm_threads[], int num_threads,

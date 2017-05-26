@@ -16,6 +16,8 @@ int main(int argc, char* argv[]) {
 	char* buf = (char *) malloc(PCM_SIZE);
 	struct pcm_thread pcm_threads[PCM_NUM_BANKS];
 
+	pcm_param(argc, argv);
+
 	memset(pcm_threads, 0, sizeof(pcm_threads));
 
 	struct timeval t1, t2;

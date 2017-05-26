@@ -6,6 +6,7 @@ import sys
 
 exe = str(sys.argv[1])
 num_banks = int(sys.argv[2])
+num_rows = int(sys.argv[3])
 
 max_outstanding = 64
 next_core_id = 0
@@ -142,8 +143,9 @@ ariel.addParams({
     "arielmode" : 1,
     "max_insts" : 100000000,
 # ARGUMENTS
-    "appargcount" : 1,
-    "apparg0" : "../ml-20m/ratings.csv",
+    "appargcount" : 2,
+    "apparg0" : str(num_banks),
+    "apparg1" : str(num_rows),
     "executable" : Executable
 })
 
@@ -436,7 +438,7 @@ sst.enableAllStatisticsForAllComponents({"type":"sst.AccumulatorStatistic"})
 
 sst.setStatisticOutput("sst.statOutputCSV")
 sst.setStatisticOutputOptions( {
-	"filepath"  : "STATS/"+str(exe) + "_" + str(num_banks) +".csv",
+	"filepath"  : "STATS/"+str(exe) + "_" + str(num_banks) + "_" + str(num_rows) +".csv",
 	"separator" : ", "
 } )
 
