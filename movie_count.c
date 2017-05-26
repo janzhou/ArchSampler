@@ -1,5 +1,6 @@
 #include "pcm.h"
 #include "movie.h"
+#include "arielapi.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,12 +32,13 @@ int main(int argc, char* argv[]) {
         pcm_thread_add_row(pcm_threads + bank, buf, r);
 	}
 
-	gettimeofday(&t1, NULL);
-
 	pcm_threads_map_count_fn(pcm_threads, PCM_NUM_BANKS, pcm_movie_db_cnt_local);
 
 	if (pcm_movie_db_init(buf, "data/ml-20m/ratings.csv"))
 		return errno;
+
+	gettimeofday(&t1, NULL);
+	ariel_enable();
 
 	pcm_threads_spawn(pcm_threads, PCM_NUM_BANKS);
 	pcm_threads_join(pcm_threads, PCM_NUM_BANKS);

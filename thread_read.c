@@ -33,14 +33,12 @@ int main(int argc, char* argv[]) {
         pcm_thread_add_row(pcm_threads + bank, buf, r);
 	}
 
-	gettimeofday(&t1, NULL);
-
 	for(b = 0; b < PCM_NUM_BANKS; b++) {
 		struct pcm_thread * pth = pcm_threads + b;
 		pth->fn = read_fn;
 	}
 
-
+	gettimeofday(&t1, NULL);
 	ariel_enable();
 
 	pcm_threads_spawn(pcm_threads, PCM_NUM_BANKS);

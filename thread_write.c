@@ -1,4 +1,5 @@
 #include "pcm.h"
+#include "arielapi.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,6 +31,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	gettimeofday(&t1, NULL);
+	ariel_enable();
 
 	for(b = 0; b < PCM_NUM_BANKS; b++) {
 		struct pcm_thread * pth = pcm_threads + b;
