@@ -7,7 +7,7 @@ void pcm_param(int argc, char* argv[]) {
 	if (argc == 3) {
 		int banks = atoi(argv[1]);
 		int rows = atoi(argv[2]);
-		if(banks > PCM_NUM_BANKS_MAX && rows > PCM_ROWS_PER_BANK_MAX) {
+		if(banks > PCM_NUM_BANKS_MAX || rows > PCM_ROWS_PER_BANK_MAX) {
 			printf("PCM_NUM_BANKS_MAX: %d ; PCM_ROWS_PER_BANK_MAX: %d\n", PCM_NUM_BANKS_MAX, PCM_ROWS_PER_BANK_MAX);
 			exit(-1);
 		}
