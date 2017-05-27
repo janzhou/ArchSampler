@@ -2,9 +2,10 @@
 
 int PCM_NUM_BANKS = PCM_NUM_BANKS_MAX;
 int PCM_ROWS_PER_BANK = PCM_ROWS_PER_BANK_MAX;
+int PCM_ENABLE_OPENMP = 0;
 
 void pcm_param(int argc, char* argv[]) {
-	if (argc == 3) {
+	if (argc >= 3) {
 		int banks = atoi(argv[1]);
 		int rows = atoi(argv[2]);
 		if(banks > PCM_NUM_BANKS_MAX || rows > PCM_ROWS_PER_BANK_MAX) {
@@ -16,6 +17,10 @@ void pcm_param(int argc, char* argv[]) {
 	} else if (argc != 1) {
 		printf("Usage: %s <banks> <rows_per_bank>\n", argv[0]);
 		exit(-1);
+	}
+
+	if (argc >= 4) {
+		PCM_ENABLE_OPENMP = atoi(argv[3]);
 	}
 
 	printf("PCM_NUM_BANKS: %d;\nPCM_ROWS_PER_BANK: %d;\nPCM_SIZE: %dMB;\n", PCM_NUM_BANKS, PCM_ROWS_PER_BANK, PCM_SIZE/(1024*1024));
@@ -34,28 +39,28 @@ void *pcm_thread_func(void *data)
 		}
 	}
 
-#ifndef PCM_OPENMP
-	pthread_exit(0);
-#endif
+	if(!PCM_ENABLE_OPENMP) {
+		pthread_exit(0);
+	}
 }
 
 void pcm_threads_run(struct pcm_thread * pcm_threads, int num_threads){
 	int i;
-#ifdef PCM_OPENMP
+	if(PCM_ENABLE_OPENMP) {
 #pragma omp parallel for num_threads(num_threads)
-	for(i = 0; i < num_threads; i++){
-		pcm_thread_func(pcm_threads + i);
+		for(i = 0; i < num_threads; i++){
+			pcm_thread_func(pcm_threads + i);
+		}
+	} else {
+		for(i = 0; i < num_threads; i++){
+			struct pcm_thread * pth = pcm_threads + i;
+			pthread_create(&pth->pthread, NULL, pcm_thread_func, pth);
+		}
+		for (i = 0; i < num_threads; i++) {
+			struct pcm_thread * pth = pcm_threads + i;
+			pthread_join(pth->pthread, NULL);
+		}
 	}
-#else
-	for(i = 0; i < num_threads; i++){
-		struct pcm_thread * pth = pcm_threads + i;
-		pthread_create(&pth->pthread, NULL, pcm_thread_func, pth);
-	}
-	for (i = 0; i < num_threads; i++) {
-		struct pcm_thread * pth = pcm_threads + i;
-		pthread_join(pth->pthread, NULL);
-	}
-#endif
 }
 
 void pcm_thread_add_row(struct pcm_thread * pth, void * base, int row) {

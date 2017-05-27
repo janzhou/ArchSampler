@@ -26,12 +26,8 @@ extern int PCM_ROWS_PER_BANK;
 #define PCM_R2B(r)          (r % PCM_NUM_BANKS)
 #define PCM_R2P(base, r)    ((char *)base + (r * PCM_ROW_SIZE))
 
-#define PCM_OPENMP
-
 struct pcm_thread {
-#ifndef PCM_OPENMP
 	pthread_t pthread;
-#endif
 	unsigned long (* count_fn)(void *row);
 	unsigned long count;
 	void (* fn)(void *row);
