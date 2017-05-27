@@ -39,8 +39,7 @@ int main(int argc, char* argv[]) {
 	gettimeofday(&t1, NULL);
 	ariel_enable();
 
-	pcm_threads_spawn(pcm_threads, PCM_NUM_BANKS);
-	pcm_threads_join(pcm_threads, PCM_NUM_BANKS);
+	pcm_threads_run(pcm_threads, PCM_NUM_BANKS);
 	pcm_threads_reduce_count_fn(pcm_threads, PCM_NUM_BANKS, pcm_movie_db_cnt_global);
 
 	gettimeofday(&t2, NULL);

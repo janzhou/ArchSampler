@@ -13,7 +13,7 @@ void read_fn(void* row){
 		sum += buf[i];
 	}
 
-	printf("%d\n", sum);
+	//printf("%d\n", sum);
 }
 
 int main(int argc, char* argv[]) {
@@ -41,8 +41,7 @@ int main(int argc, char* argv[]) {
 	gettimeofday(&t1, NULL);
 	ariel_enable();
 
-	pcm_threads_spawn(pcm_threads, PCM_NUM_BANKS);
-	pcm_threads_join(pcm_threads, PCM_NUM_BANKS);
+	pcm_threads_run(pcm_threads, PCM_NUM_BANKS);
 
 	gettimeofday(&t2, NULL);
 	execution_time = ((t2.tv_sec * 1000000 + t2.tv_usec) - (t1.tv_sec * 1000000 + t1.tv_usec)) / (float) 1000;

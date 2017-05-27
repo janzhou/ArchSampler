@@ -34,25 +34,28 @@ void *pcm_thread_func(void *data)
 		}
 	}
 
+#ifndef PCM_OPENMP
 	pthread_exit(0);
+#endif
 }
 
-void pcm_threads_spawn(struct pcm_thread * pcm_threads, int num_threads){
+void pcm_threads_run(struct pcm_thread * pcm_threads, int num_threads){
 	int i;
+#ifdef PCM_OPENMP
+#pragma omp parallel for num_threads(num_threads)
+	for(i = 0; i < num_threads; i++){
+		pcm_thread_func(pcm_threads + i);
+	}
+#else
 	for(i = 0; i < num_threads; i++){
 		struct pcm_thread * pth = pcm_threads + i;
 		pthread_create(&pth->pthread, NULL, pcm_thread_func, pth);
 	}
-}
-
-void pcm_threads_join(struct pcm_thread pcm_threads[], int num_threads)
-{
-	int i;
-
 	for (i = 0; i < num_threads; i++) {
 		struct pcm_thread * pth = pcm_threads + i;
 		pthread_join(pth->pthread, NULL);
 	}
+#endif
 }
 
 void pcm_thread_add_row(struct pcm_thread * pth, void * base, int row) {

@@ -26,8 +26,12 @@ extern int PCM_ROWS_PER_BANK;
 #define PCM_R2B(r)          (r % PCM_NUM_BANKS)
 #define PCM_R2P(base, r)    ((char *)base + (r * PCM_ROW_SIZE))
 
+#define PCM_OPENMP
+
 struct pcm_thread {
+#ifndef PCM_OPENMP
 	pthread_t pthread;
+#endif
 	unsigned long (* count_fn)(void *row);
 	unsigned long count;
 	void (* fn)(void *row);
@@ -51,7 +55,6 @@ void pcm_threads_reduce_count_fn(
 		void (* count_reduce)(unsigned long count)
 		);
 
-void pcm_threads_spawn(struct pcm_thread pcm_threads[], int num_threads);
-void pcm_threads_join(struct pcm_thread pcm_threads[], int num_threads);
+void pcm_threads_run(struct pcm_thread pcm_threads[], int num_threads);
 
 #endif /* PCM_H_ */
