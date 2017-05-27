@@ -136,7 +136,7 @@ ariel.addParams({
     "maxissuepercycle" : 3,
     "maxtranscore": 16,
     "pipetimeout" : 0,
-    "corecount" : groups * cores_per_group,
+    "corecount" : groups * cores_per_group/2,
     "memorylevels" : 1,
     "pagecount0" : num_pages,
     "pagesize0" : page_size * 1024,
