@@ -8,7 +8,7 @@ exe = str(sys.argv[1])
 num_banks = int(sys.argv[2])
 num_rows = int(sys.argv[3])
 
-max_outstanding = 64
+max_outstanding = num_banks
 next_core_id = 0
 next_network_id = 0
 next_memory_ctrl_id = 0
