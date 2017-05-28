@@ -1,4 +1,6 @@
 #include "pcm.h"
+#include <time.h>
+#include <stdlib.h>
 
 int PCM_NUM_BANKS = PCM_NUM_BANKS_MAX;
 int PCM_ROWS_PER_BANK = PCM_ROWS_PER_BANK_MAX;
@@ -98,4 +100,37 @@ void pcm_threads_reduce_count_fn(
 	}
 }
 
+void pcm_rows_shuffle(int rows[], int num_rows) {
+	int r;
+	srand(time(NULL));
+	for(r = 0; r < num_rows; r++) {
+		int swap = rand() % num_rows;
+		int tmp = rows[r];
+		rows[r] = rows[swap];
+		rows[swap] = tmp;
+	}
+}
 
+void pcm_r2t_contention_free(struct pcm_thread pths[], int num_threads, int rows[], int num_rows, void * buf) {
+	int r;
+	for(r = 0; r < num_rows; r++) {
+		int bank = PCM_R2B(r);
+		int t = bank % num_threads;
+		pcm_thread_add_row(pths + t, buf, rows[r]);
+	}
+}
+
+void pcm_r2t_even_split(struct pcm_thread pths[], int num_threads, int rows[], int num_rows, void * buf) {
+	int rows_in_thread = num_rows / num_threads;
+	int left_rows = num_rows % num_threads;
+
+	int r, t;
+	for(t = 0; t < num_threads; t++) {
+		for(r = 0; r < rows_in_thread; r++) {
+			pcm_thread_add_row(pths + t, buf, rows[t * rows_in_thread + r]);
+		}
+	}
+	for(r = 0; r < left_rows; r++) {
+		pcm_thread_add_row(pths + r, buf, rows[num_threads * rows_in_thread + r]);
+	}
+}

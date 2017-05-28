@@ -17,18 +17,18 @@ int main(int argc, char* argv[]) {
 	struct timeval t1, t2;
 	float execution_time;
 
-	int r, b;
-
 	buf = (char *) calloc(1, PCM_SIZE);
 	if (!buf) {
 		perror("Failed to allocate the memory:");
 		return errno;
 	}
 
+	int rows[PCM_NUM_ROWS], r;
 	for(r = 0; r < PCM_NUM_ROWS; r++) {
-		int bank = PCM_R2B(r);
-		pcm_thread_add_row(pcm_threads + bank, buf, r);
+		rows[r] = r;
 	}
+
+	pcm_r2t_contention_free(pcm_threads, PCM_NUM_BANKS, rows, PCM_NUM_ROWS, buf);
 
 	pcm_threads_map_count_fn(pcm_threads, PCM_NUM_BANKS, pcm_movie_db_cnt_local);
 

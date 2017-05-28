@@ -52,5 +52,10 @@ void pcm_threads_reduce_count_fn(
 		);
 
 void pcm_threads_run(struct pcm_thread pcm_threads[], int num_threads);
+void pcm_rows_shuffle(int rows[], int num_rows);
+
+/* assign rows to threads */
+void pcm_r2t_contention_free(struct pcm_thread pths[], int num_threads, int rows[], int num_rows, void * buf);
+void pcm_r2t_even_split(struct pcm_thread pths[], int num_threads, int rows[], int num_rows, void * buf);
 
 #endif /* PCM_H_ */
