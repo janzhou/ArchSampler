@@ -8,7 +8,13 @@
 
 int main(int argc, char* argv[]) {
 	char* buf;
-	struct pcm_thread pcm_threads[PCM_NUM_BANKS];
+	struct pcm_thread *pcm_threads;
+
+	pcm_threads = (struct pcm_thread *) calloc(PCM_NUM_BANKS, sizeof (*pcm_threads));
+	if (!pcm_threads) {
+		perror("Failed to allocate thread memory");
+		return errno;
+	}
 
 	pcm_param(argc, argv);
 
