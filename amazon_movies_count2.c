@@ -4,22 +4,19 @@
 
 int main(int argc, char *argv[])
 {
-	char *buf;
-	struct pcm_thread *pcm_threads;
-
-	pcm_threads = (struct pcm_thread *) calloc(PCM_NUM_BANKS, sizeof (*pcm_threads));
-	if (!pcm_threads) {
-		perror("Failed to allocate thread memory");
-		return errno;
-	}
-
 	pcm_param(argc, argv);
 
-	memset(pcm_threads, 0, sizeof(pcm_threads));
-
+	char *buf;
 	buf = calloc(1, PCM_SIZE);
 	if (!buf) {
 		perror("Unable to allocate memory");
+		return errno;
+	}
+
+	struct pcm_thread *pcm_threads;
+	pcm_threads = (struct pcm_thread *) calloc(PCM_NUM_BANKS, sizeof (*pcm_threads));
+	if (!pcm_threads) {
+		perror("Failed to allocate thread memory");
 		return errno;
 	}
 
