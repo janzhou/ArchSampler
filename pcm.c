@@ -11,7 +11,7 @@ void pcm_param(int argc, char* argv[]) {
 		int banks = atoi(argv[1]);
 		int rows = atoi(argv[2]);
 		if(banks > PCM_NUM_BANKS_MAX || rows > PCM_ROWS_PER_BANK_MAX) {
-			printf("PCM_NUM_BANKS_MAX: %d ; PCM_ROWS_PER_BANK_MAX: %d\n", PCM_NUM_BANKS_MAX, PCM_ROWS_PER_BANK_MAX);
+			printf("PCM_NUM_BANKS_MAX: %d ; PCM_ROWS_PER_BANK_MAX: %lu\n", PCM_NUM_BANKS_MAX, PCM_ROWS_PER_BANK_MAX);
 			exit(-1);
 		}
 		PCM_NUM_BANKS = banks;
@@ -25,7 +25,7 @@ void pcm_param(int argc, char* argv[]) {
 		PCM_ENABLE_OPENMP = atoi(argv[3]);
 	}
 
-	printf("PCM_NUM_BANKS: %d;\nPCM_ROWS_PER_BANK: %d;\nPCM_SIZE: %dMB;\n", PCM_NUM_BANKS, PCM_ROWS_PER_BANK, PCM_SIZE/(1024*1024));
+	printf("PCM_NUM_BANKS: %d;\nPCM_ROWS_PER_BANK: %d;\nPCM_SIZE: %luMB;\n", PCM_NUM_BANKS, PCM_ROWS_PER_BANK, PCM_SIZE/(1024*1024));
 }
 
 void *pcm_thread_func(void *data)
