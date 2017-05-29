@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 
 	pcm_threads_map_count_fn(pcm_threads, PCM_NUM_BANKS, amazon_movies_cnt_local);	
 
-	if (amazon_movies_init_mem(buf, "../movies.txt"))
+	if (amazon_movies_init_mem(buf, "data/movies.txt"))
 		return errno;
 
 	ariel_enable();
