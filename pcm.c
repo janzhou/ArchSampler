@@ -111,6 +111,17 @@ void pcm_rows_shuffle(int rows[], int num_rows) {
 	}
 }
 
+void pcm_rows_bank_aware_shuffle(int rows[], int num_rows) {
+	int r;
+	srand(time(NULL));
+	for(r = 0; r < num_rows; r++) {
+		int swap = rand() % PCM_ROWS_PER_BANK * PCM_NUM_BANKS + PCM_R2B(r);
+		int tmp = rows[r];
+		rows[r] = rows[swap];
+		rows[swap] = tmp;
+	}
+}
+
 void pcm_r2t_contention_free(struct pcm_thread pths[], int num_threads, int rows[], int num_rows, void * buf) {
 	int r;
 	for(r = 0; r < num_rows; r++) {
