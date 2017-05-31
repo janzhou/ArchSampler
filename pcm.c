@@ -1,31 +1,40 @@
 #include "pcm.h"
 #include <time.h>
 #include <stdlib.h>
+#include <getopt.h>
 
 int PCM_NUM_BANKS = PCM_NUM_BANKS_MAX;
 int PCM_ROWS_PER_BANK = PCM_ROWS_PER_BANK_MAX;
 int PCM_ENABLE_OPENMP = 0;
 
 void pcm_param(int argc, char* argv[]) {
-	if (argc >= 3) {
-		int banks = atoi(argv[1]);
-		int rows = atoi(argv[2]);
-		if(banks > PCM_NUM_BANKS_MAX || rows > PCM_ROWS_PER_BANK_MAX) {
-			printf("PCM_NUM_BANKS_MAX: %d ; PCM_ROWS_PER_BANK_MAX: %lu\n", PCM_NUM_BANKS_MAX, PCM_ROWS_PER_BANK_MAX);
-			exit(-1);
+	int option = 0;
+	opterr = 0;
+	optind = 1;
+	while ((option = getopt(argc, argv,"b:r:m")) != -1) {
+		switch (option) {
+			case 'm' : PCM_ENABLE_OPENMP = 1;
+				   break;
+			case 'b' : PCM_NUM_BANKS = atoi(optarg);
+				   break;
+			case 'r' : PCM_ROWS_PER_BANK = atoi(optarg);
+				   break;
+			case 0 : break;
 		}
-		PCM_NUM_BANKS = banks;
-		PCM_ROWS_PER_BANK = rows;
-	} else if (argc != 1) {
-		printf("Usage: %s <banks> <rows_per_bank>\n", argv[0]);
+	}
+
+	if( PCM_NUM_BANKS > PCM_NUM_BANKS_MAX ) {
+		printf("PCM_NUM_BANKS_MAX: %d\n", PCM_NUM_BANKS_MAX);
 		exit(-1);
 	}
 
-	if (argc >= 4) {
-		PCM_ENABLE_OPENMP = atoi(argv[3]);
+	if( PCM_ROWS_PER_BANK > PCM_ROWS_PER_BANK_MAX) {
+		printf("PCM_ROWS_PER_BANK_MAX: %lu\n", PCM_ROWS_PER_BANK_MAX);
+		exit(-1);
 	}
 
 	printf("PCM_NUM_BANKS: %d;\nPCM_ROWS_PER_BANK: %d;\nPCM_SIZE: %luMB;\n", PCM_NUM_BANKS, PCM_ROWS_PER_BANK, PCM_SIZE/(1024*1024));
+	optind = 1;
 }
 
 void *pcm_thread_func(void *data)

@@ -8,7 +8,6 @@ exe = str(sys.argv[1])
 num_banks = int(sys.argv[2])
 num_rows = int(sys.argv[3])
 
-openmp = 1
 max_outstanding = num_banks
 next_core_id = 0
 next_network_id = 0
@@ -145,9 +144,9 @@ ariel.addParams({
     "max_insts" : 100000000,
 # ARGUMENTS
     "appargcount" : 3,
-    "apparg0" : str(num_banks),
-    "apparg1" : str(num_rows),
-    "apparg2" : str(openmp),
+    "apparg0" : "-b" + str(num_banks),
+    "apparg1" : "-r" + str(num_rows),
+    "apparg2" : "-m",
     "executable" : Executable
 })
 
