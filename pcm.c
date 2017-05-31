@@ -11,7 +11,7 @@ void pcm_param(int argc, char* argv[]) {
 	int option = 0;
 	opterr = 0;
 	optind = 1;
-	while ((option = getopt(argc, argv,"b:r:m")) != -1) {
+	while ((option = getopt(argc, argv,"b:r:mh")) != -1) {
 		switch (option) {
 			case 'm' : PCM_ENABLE_OPENMP = 1;
 				   break;
@@ -19,6 +19,9 @@ void pcm_param(int argc, char* argv[]) {
 				   break;
 			case 'r' : PCM_ROWS_PER_BANK = atoi(optarg);
 				   break;
+			case '?':
+			case 'h' : printf("pcm args:\n-m\t\topenmp flag\n-b <num_banks>\tthe number of banks\n-r <num_rows>\tthe number of rows in banks\n\n");
+				   exit(-1);
 			case 0 : break;
 		}
 	}
