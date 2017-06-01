@@ -35,7 +35,7 @@ struct pcm_thread {
 	void * rows[PCM_ROWS_PER_BANK_MAX];
 };
 
-void pcm_param(int argc, char* argv[]);
+void pcm_param(int argc, char* argv[], char* usage);
 
 void pcm_thread_add_row(struct pcm_thread * pth, void * base, int row);
 void pcm_threads_map_fn(

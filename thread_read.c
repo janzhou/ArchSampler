@@ -17,7 +17,7 @@ void read_fn(void* row){
 }
 
 int main(int argc, char* argv[]) {
-	pcm_param(argc, argv);
+	pcm_param(argc, argv, NULL);
 
 	char *buf;
 	buf = calloc(1, PCM_SIZE);

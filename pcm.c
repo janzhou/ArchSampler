@@ -7,7 +7,7 @@ int PCM_NUM_BANKS = PCM_NUM_BANKS_MAX;
 int PCM_ROWS_PER_BANK = PCM_ROWS_PER_BANK_MAX;
 int PCM_ENABLE_OPENMP = 0;
 
-void pcm_param(int argc, char* argv[]) {
+void pcm_param(int argc, char* argv[], char* usage) {
 	int option = 0;
 	opterr = 0;
 	optind = 1;
@@ -19,7 +19,8 @@ void pcm_param(int argc, char* argv[]) {
 				   break;
 			case 'r' : PCM_ROWS_PER_BANK = atoi(optarg);
 				   break;
-			case 'h' : printf("pcm args:\n-m\t\topenmp flag\n-b <num_banks>\tthe number of banks\n-r <num_rows>\tthe number of rows in banks\n\n");
+			case 'h' : printf("-m\t\topenmp flag\n-b <num_banks>\tthe number of banks\n-r <num_rows>\tthe number of rows in banks\n\n");
+				   if(usage != NULL) printf(usage);
 				   exit(-1);
 			case '?': break;
 			case 0: break;

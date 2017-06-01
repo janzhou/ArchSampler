@@ -4,7 +4,7 @@
 
 int main(int argc, char *argv[])
 {
-	pcm_param(argc, argv);
+	pcm_param(argc, argv, "-p <repeat>\n-s <sample>\n-a bank aware shuffle\n-c contention free threads\n");
 
 	int option;
 	int sample = PCM_NUM_ROWS;

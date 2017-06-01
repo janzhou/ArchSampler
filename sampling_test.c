@@ -5,7 +5,7 @@
 #include <sys/time.h>
 
 int main(int argc, char* argv[]) {
-	pcm_param(argc, argv);
+	pcm_param(argc, argv, "-s <sample>\n-a bank aware shuffle\n");
 
 	int option;
 	int sample = 0;
