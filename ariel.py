@@ -440,7 +440,7 @@ sst.enableAllStatisticsForAllComponents({"type":"sst.AccumulatorStatistic"})
 
 sst.setStatisticOutput("sst.statOutputCSV")
 sst.setStatisticOutputOptions( {
-	"filepath"  : "STATS/"+str(exe) + "_" + str(num_banks) + "_" + str(num_rows) +".csv",
+	"filepath"  : "STATS/"+str(exe) + "_" + str(num_banks) + "_" + str(num_rows) + "_" + str(opts) + ".csv",
 	"separator" : ", "
 } )
 
