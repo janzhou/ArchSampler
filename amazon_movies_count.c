@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
 
 	int option;
 	int sample = PCM_NUM_ROWS;
-	int repeat = 1;
+	int repeat = PCM_NUM_BANKS;
 	int bank_aware_shuffle = 0;
 	int contention_free_r2t = 0;
 
