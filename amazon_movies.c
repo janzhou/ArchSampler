@@ -90,20 +90,27 @@ int amazon_movies_init_mem(char *mem, char *file)
 	return 0;
 }
 
+void amazon_movies_reset_global_cnt()
+{
+	//sem_wait(&n_ele_lock);
+	n_elements = 0;
+	//sem_post(&n_ele_lock);
+}
+
 void amazon_movies_cnt_global(unsigned long local_cnt)
 {
-	sem_wait(&n_ele_lock);
+	//sem_wait(&n_ele_lock);
 	n_elements += local_cnt;
-	sem_post(&n_ele_lock);
+	//sem_post(&n_ele_lock);
 }
 
 unsigned long amazon_movies_get_global_cnt()
 {
 	unsigned long cnt;
 
-	sem_wait(&n_ele_lock);
+	//sem_wait(&n_ele_lock);
 	cnt = n_elements;
-	sem_post(&n_ele_lock);
+	//sem_post(&n_ele_lock);
 
 	return cnt;
 }

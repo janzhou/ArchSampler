@@ -21,5 +21,6 @@ int amazon_movies_init_mem(char *mem, char *file);
 unsigned long amazon_movies_cnt_local(void *row);
 void amazon_movies_cnt_global(unsigned long local_cnt);
 unsigned long amazon_movies_get_global_cnt();
+void amazon_movies_reset_global_cnt();
 
 #endif /* AMAZON_MOVIES_H_ */

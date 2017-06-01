@@ -99,6 +99,7 @@ void pcm_threads_map_count_fn(
 	int i;
 	for(i = 0; i < num_threads; i++) {
 		pcm_threads[i].count_fn = count_fn;
+		pcm_threads[i].count = 0;
 	}
 }
 
@@ -135,10 +136,12 @@ void pcm_rows_bank_aware_shuffle(int rows[], int num_rows) {
 }
 
 void pcm_r2t_contention_free(struct pcm_thread pths[], int num_threads, int rows[], int num_rows, void * buf) {
-	int r;
+	int r, t;
+	for(t = 0; t < num_threads; t++) {
+		pths[t].num_rows = 0;
+	}
 	for(r = 0; r < num_rows; r++) {
-		int bank = PCM_R2B(r);
-		int t = bank % num_threads;
+		t = PCM_R2B(r) % num_threads;
 		pcm_thread_add_row(pths + t, buf, rows[r]);
 	}
 }
@@ -149,6 +152,7 @@ void pcm_r2t_even_split(struct pcm_thread pths[], int num_threads, int rows[], i
 
 	int r, t;
 	for(t = 0; t < num_threads; t++) {
+		pths[t].num_rows = 0;
 		for(r = 0; r < rows_in_thread; r++) {
 			pcm_thread_add_row(pths + t, buf, rows[t * rows_in_thread + r]);
 		}
