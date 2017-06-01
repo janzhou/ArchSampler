@@ -7,6 +7,7 @@ import sys
 exe = str(sys.argv[1])
 num_banks = int(sys.argv[2])
 num_rows = int(sys.argv[3])
+opts = int(sys.argv[4])
 
 max_outstanding = num_banks
 next_core_id = 0
@@ -146,7 +147,7 @@ ariel.addParams({
     "appargcount" : 3,
     "apparg0" : "-b" + str(num_banks),
     "apparg1" : "-r" + str(num_rows),
-    "apparg2" : "-m",
+    "apparg2" : str(opts),
     "executable" : Executable
 })
 
