@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 	int bank_aware_shuffle = 0;
 	int contention_free_r2t = 0;
 
-	while ((option = getopt(argc, argv,"s:a")) != -1) {
+	while ((option = getopt(argc, argv,"acs:")) != -1) {
 		switch (option) {
 			case 's' : sample = atoi(optarg);
 				   break;
@@ -19,7 +19,8 @@ int main(int argc, char *argv[])
 				   break;
 			case 'c' : contention_free_r2t = 1;
 				   break;
-			case '?' : break;
+			case '?' :
+			case 0 : break;
 		}
 	}
 
@@ -48,11 +49,25 @@ int main(int argc, char *argv[])
 		pcm_rows_bank_aware_shuffle(rows, PCM_NUM_ROWS);
 	}
 
-	if(contention_free_r2t == 0) {
-		pcm_r2t_even_split(pcm_threads, PCM_NUM_BANKS, rows, PCM_NUM_ROWS, buf);
+    if(contention_free_r2t == 0) {
+        pcm_r2t_even_split(pcm_threads, PCM_NUM_BANKS, rows, sample, buf);
 	} else {
 		pcm_r2t_contention_free(pcm_threads, PCM_NUM_BANKS, rows, sample, buf);
 	}
+
+    int banks[PCM_NUM_BANKS], b, max;
+	for(b = 0; b < PCM_NUM_BANKS; b++) {
+		banks[b] = 0;
+	}
+    for(r = 0; r < sample; r++) {
+		int row = rows[r];
+		banks[PCM_R2B(row)]++;
+	}
+    for(b = 0, max = 0; b < PCM_NUM_BANKS; b++) {
+		if(max < banks[b]) max = banks[b];
+    }
+    printf("sampling:\t%f\n", (float)sample/PCM_NUM_ROWS);
+    printf("max/avg(%d/%d):\t%f\n", max, sample/PCM_NUM_BANKS, (float)max/(sample/PCM_NUM_BANKS));
 
 	pcm_threads_map_count_fn(pcm_threads, PCM_NUM_BANKS, amazon_movies_cnt_local);	
 
