@@ -19,6 +19,7 @@ int main(int argc, char *argv[])
 				   break;
 			case 'c' : contention_free_r2t = 1;
 				   break;
+			case '?' : break;
 		}
 	}
 

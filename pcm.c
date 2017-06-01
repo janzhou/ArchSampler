@@ -19,10 +19,10 @@ void pcm_param(int argc, char* argv[]) {
 				   break;
 			case 'r' : PCM_ROWS_PER_BANK = atoi(optarg);
 				   break;
-			case '?':
 			case 'h' : printf("pcm args:\n-m\t\topenmp flag\n-b <num_banks>\tthe number of banks\n-r <num_rows>\tthe number of rows in banks\n\n");
 				   exit(-1);
-			case 0 : break;
+			case '?': break;
+			case 0: break;
 		}
 	}
 

@@ -17,6 +17,8 @@ int main(int argc, char* argv[]) {
 				   break;
 			case 'a' : bank_aware_shuffle = 1;
 				   break;
+			case '?' :
+			case 0 : break;
 		}
 	}
 
