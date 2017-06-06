@@ -1,6 +1,7 @@
 #include "pcm.h"
 #include "amazon_movies.h"
 #include "arielapi.h"
+#include <assert.h>
 
 int main(int argc, char *argv[])
 {
@@ -49,19 +50,23 @@ int main(int argc, char *argv[])
 	printf("loading amazon movies...\n");
 	if (amazon_movies_init_mem(buf, "data/movies.txt"))
 		return errno;
+
+	if(bank_aware_shuffle == 0) {
+		pcm_rows_shuffle(rows, PCM_NUM_ROWS);
+	} else {
+		pcm_rows_bank_aware_shuffle(rows, PCM_NUM_ROWS);
+	}
+
+	assert(sample * repeat <= PCM_NUM_ROWS);
+
 	ariel_enable();
 
 	for(; repeat > 0; repeat--){
-		if(bank_aware_shuffle == 0) {
-			pcm_rows_shuffle(rows, PCM_NUM_ROWS);
-		} else {
-			pcm_rows_bank_aware_shuffle(rows, PCM_NUM_ROWS);
-		}
-
+		int skip = sample * ( repeat - 1 );
 		if(contention_free_r2t == 0) {
-			pcm_r2t_even_split(pcm_threads, PCM_NUM_BANKS, rows, sample, buf);
+			pcm_r2t_even_split(pcm_threads, PCM_NUM_BANKS, rows + skip, sample, buf);
 		} else {
-			pcm_r2t_contention_free(pcm_threads, PCM_NUM_BANKS, rows, sample, buf);
+			pcm_r2t_contention_free(pcm_threads, PCM_NUM_BANKS, rows + skip, sample, buf);
 		}
 
 		int banks[PCM_NUM_BANKS], b, max;
@@ -69,7 +74,7 @@ int main(int argc, char *argv[])
 			banks[b] = 0;
 		}
 		for(r = 0; r < sample; r++) {
-			int row = rows[r];
+			int row = rows[skip + r];
 			banks[PCM_R2B(row)]++;
 		}
 		for(b = 0, max = 0; b < PCM_NUM_BANKS; b++) {
