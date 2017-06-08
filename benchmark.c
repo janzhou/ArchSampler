@@ -73,10 +73,13 @@ int main(int argc, char *argv[])
 			count_reduce = pcm_movie_db_cnt_global;
 			count_get = pcm_movie_db_get_global_cnt;
 			count_reset = pcm_movie_db_reset_global_cnt;
+			break;
 		case 3:
 			count_map = write_fn;
+			break;
 		case 4:
 			count_map = read_fn;
+			break;
 	}
 
 	char *buf;
