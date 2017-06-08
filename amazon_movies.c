@@ -132,3 +132,36 @@ unsigned long amazon_movies_cnt_local(void *row)
 
 	return i;
 }
+
+void amazon_movies_capitalize_text(struct amazon_movie_review *review)
+{
+	int i = 0;
+	char *text = review->text;
+
+	for (i = 0; i < 3704 && *text != 0; i++) {
+		if (*text >= 'a' && *text <= 'z') {
+			*text -= 32;
+		}
+
+		text++;
+	}
+}
+
+unsigned long amazon_movies_capitalize_review(void *row)
+{
+	unsigned long i;
+	struct amazon_movie_review *review = (struct amazon_movie_review *) row;
+	int n_reviews_per_row = PCM_ROW_SIZE / sizeof(struct amazon_movie_review);
+
+	for (i = 0; i < n_reviews_per_row; i++) {
+
+		if (!strcmp(review->product_id, ""))
+			break;
+
+		amazon_movies_capitalize_text(review);		
+
+		review++;
+	}
+
+	return i;
+}

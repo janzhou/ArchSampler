@@ -22,5 +22,6 @@ unsigned long amazon_movies_cnt_local(void *row);
 void amazon_movies_cnt_global(unsigned long local_cnt);
 unsigned long amazon_movies_get_global_cnt();
 void amazon_movies_reset_global_cnt();
+unsigned long amazon_movies_capitalize_review(void *row);
 
 #endif /* AMAZON_MOVIES_H_ */
