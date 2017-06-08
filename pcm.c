@@ -162,3 +162,25 @@ void pcm_r2t_even_split(struct pcm_thread pths[], int num_threads, int rows[], i
 		pcm_thread_add_row(pths + r, buf, rows[num_threads * rows_in_thread + r]);
 	}
 }
+
+void pcm_print_row_shuffle(int rows[])
+{
+	int r;
+
+	for (r = 0; r < PCM_NUM_ROWS; r++)
+		fprintf(stderr, "row[%d]: %d (%d->%d)\n", r, rows[r], r % PCM_NUM_BANKS, rows[r] % PCM_NUM_BANKS);
+}
+
+void pcm_print_t2r(int num_threads, int rows[])
+{
+	int r, t, rows_in_thread = num_threads / PCM_NUM_BANKS;
+
+	for (t = 0; t < PCM_NUM_BANKS; t++) {
+		fprintf(stderr, "thread-%d : ", t);
+		for(r = 0; r < rows_in_thread; r++) {
+			fprintf(stderr, "%d ", rows[t * rows_in_thread + r]);
+		}
+
+		fprintf(stderr, "\n");
+	}
+}
