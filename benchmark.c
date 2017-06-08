@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 		rows[r] = r;
 	}
 
-	printf("loading amazon movies...\n");
+	printf("loading data...\n");
 	if(init_mem != NULL) {
 		if ((* init_mem)(buf))
 			return errno;
@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
 		}
 
 		if(count_get != NULL) {
-			printf("Amazon reviews count: %lu\n", (*count_get)());
+			printf("count: %lu\n", (*count_get)());
 		}
 	}
 
