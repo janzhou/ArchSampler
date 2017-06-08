@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
 	}
 
 	printf("loading amazon movies...\n");
-	if (amazon_movies_init_mem(buf, "data/movies.txt"))
+	if (amazon_movies_init_mem(buf))
 		return errno;
 
 	if(bank_aware_shuffle == 0) {

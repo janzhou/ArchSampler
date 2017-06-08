@@ -6,10 +6,11 @@ unsigned long n_elements;
 
 //#define AMAZON_MOVIES_DEBUG
 
-int amazon_movies_init_mem(char *mem, char *file)
+int amazon_movies_init_mem(char *mem)
 {
 	int i, j;	
 	char *buff = NULL;
+	char *file = "data/movies.txt";
 	size_t len;
 	struct amazon_movie_review *review;
 	int n_reviews_per_row = PCM_ROW_SIZE / sizeof(struct amazon_movie_review);

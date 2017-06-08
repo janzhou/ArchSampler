@@ -44,7 +44,7 @@ int main(int argc, char* argv[]) {
 
 	pcm_threads_map_count_fn(pcm_threads, PCM_NUM_BANKS, pcm_movie_db_cnt_local);
 
-	if (pcm_movie_db_init(buf, "data/ml-20m/ratings.csv"))
+	if (pcm_movie_db_init(buf))
 		return errno;
 
 	gettimeofday(&t1, NULL);

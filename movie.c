@@ -1,20 +1,21 @@
 #include "pcm.h"
 #include "movie.h"
 
-sem_t n_ele_lock;
+//sem_t n_ele_lock;
 unsigned long n_elements;
 
 //#define MOVIE_DB_LOAD_DEBUG
 
-int pcm_movie_db_init(char *buf, char *file)
+int pcm_movie_db_init(char *buf)
 {
 	struct movie_db db;
 	unsigned int i, j;
 	unsigned int n_db_ele_per_row = PCM_ROW_SIZE / sizeof(db);
 	char line[512];
 	struct movie_db *location;
+	char *file = "data/ml-20m/ratings.csv";
 
-	sem_init(&n_ele_lock, 0, 1);
+	//sem_init(&n_ele_lock, 0, 1);
 
 	FILE *fp = fopen(file, "r");
 	if (!fp)
@@ -64,20 +65,24 @@ out:
 	return 0;
 }
 
+void pcm_movie_db_reset_global_cnt() {
+	n_elements = 0;
+}
+
 void pcm_movie_db_cnt_global(unsigned long local_cnt)
 {
-	sem_wait(&n_ele_lock);
+	//sem_wait(&n_ele_lock);
 	n_elements += local_cnt;
-	sem_post(&n_ele_lock);
+	//sem_post(&n_ele_lock);
 }
 
 unsigned long pcm_movie_db_get_global_cnt()
 {
 	unsigned long cnt;
 
-	sem_wait(&n_ele_lock);
+	//sem_wait(&n_ele_lock);
 	cnt = n_elements;
-	sem_post(&n_ele_lock);
+	//sem_post(&n_ele_lock);
 
 	return cnt;
 }
