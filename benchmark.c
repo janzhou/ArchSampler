@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 	pcm_param(argc, argv,
 	"-p <repeat>\n"
 	"-s <sample>\n"
-	"-a <shuffle pattern> (0: Random shuffle, 1: Bank-aware shuffle-1, 2: Bank-aware shuffle-2)\n"
+	"-a <shuffle pattern> (0: Random shuffle, 1: Bank-aware shuffle-1, 2: Bank-aware shuffle-2, 3: No shuffle)\n"
 	"-c contention free threads\n"
 	"-w <workload> 1: amazon_movie; 2: movielens; 3: write; 4: read;\n");
 
@@ -126,6 +126,8 @@ int main(int argc, char *argv[])
 	}
 
 	switch (bank_aware_shuffle) {
+		case 3:
+			break;
 		case 2: pcm_rows_bank_aware_shuffle2(rows, PCM_NUM_ROWS);
 			printf("Bank-aware Shuffle-2\n");
 			break;
