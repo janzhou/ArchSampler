@@ -7,9 +7,7 @@ import sys
 exe = str(sys.argv[1])
 num_banks = int(sys.argv[2])
 num_rows = int(sys.argv[3])
-opts = str(sys.argv[4])
-wrkld = str(sys.argv[5])
-shuffle = str(sys.argv[6])
+opts = map((lambda x: "-" + x), sys.argv[4].split("-"))
 
 max_outstanding = num_banks
 next_core_id = 0
@@ -131,7 +129,7 @@ mmu.addParams({
 
 # ariel cpu
 ariel = sst.Component("a0", "ariel.ariel")
-ariel.addParams({
+arielParams = {
     "verbose" : 1,
     "clock" : clock,
     "maxcorequeue" : 1024,
@@ -145,16 +143,17 @@ ariel.addParams({
     "defaultlevel" : 0,
     "arielmode" : 0,
     "max_insts" : 100000000,
-# ARGUMENTS
-    "appargcount" : 6,
-    "apparg0" : "-b" + str(num_banks),
-    "apparg1" : "-r" + str(num_rows),
-    "apparg2" : "-" + str(opts),
-    "apparg3" : "-w" + str(wrkld),
-    "apparg4" : "-p1",
-    "apparg5" : "-a" + str(shuffle),
     "executable" : Executable
-})
+}
+
+# ARGUMENTS
+arielParams["appargcount"] = 2 + len(opts)
+arielParams["apparg0"] = "-b" + str(num_banks)
+arielParams["apparg1"] = "-r" + str(num_rows)
+for i in range(0, len(opts)):
+	arielParams["apparg" + str(i + 2)] = opts[i]
+
+ariel.addParams(arielParams)
 
 l1_params = {
         "cache_frequency": clock,
@@ -445,7 +444,7 @@ sst.enableAllStatisticsForAllComponents({"type":"sst.AccumulatorStatistic"})
 
 sst.setStatisticOutput("sst.statOutputCSV")
 sst.setStatisticOutputOptions( {
-	"filepath"  : "STATS/"+str(exe) + "_" + str(num_banks) + "_" + str(num_rows) + "_" + str(opts) + "_" + str(shuffle) + ".csv",
+	"filepath"  : "STATS/"+str(exe) + "-b" + str(num_banks) + "-r" + str(num_rows) + "-" + str(opts) + ".csv",
 	"separator" : ", "
 } )
 
