@@ -9,6 +9,7 @@ num_banks = int(sys.argv[2])
 num_rows = int(sys.argv[3])
 opts = str(sys.argv[4])
 wrkld = str(sys.argv[5])
+shuffle = str(sys.argv[6])
 
 max_outstanding = num_banks
 next_core_id = 0
@@ -145,12 +146,13 @@ ariel.addParams({
     "arielmode" : 0,
     "max_insts" : 100000000,
 # ARGUMENTS
-    "appargcount" : 5,
+    "appargcount" : 6,
     "apparg0" : "-b" + str(num_banks),
     "apparg1" : "-r" + str(num_rows),
     "apparg2" : "-" + str(opts),
     "apparg3" : "-w" + str(wrkld),
     "apparg4" : "-p1",
+    "apparg5" : "-a" + str(shuffle),
     "executable" : Executable
 })
 
@@ -443,7 +445,7 @@ sst.enableAllStatisticsForAllComponents({"type":"sst.AccumulatorStatistic"})
 
 sst.setStatisticOutput("sst.statOutputCSV")
 sst.setStatisticOutputOptions( {
-	"filepath"  : "STATS/"+str(exe) + "_" + str(num_banks) + "_" + str(num_rows) + "_" + str(opts) + ".csv",
+	"filepath"  : "STATS/"+str(exe) + "_" + str(num_banks) + "_" + str(num_rows) + "_" + str(opts) + "_" + str(shuffle) + ".csv",
 	"separator" : ", "
 } )
 
