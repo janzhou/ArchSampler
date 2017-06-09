@@ -21,8 +21,8 @@ extern int PCM_ROWS_PER_BANK;
 #define PCM_SIZE			((unsigned long) PCM_NUM_ROWS * PCM_ROW_SIZE)
 
 #define PCM_OFF(base, p)    ((char*)p - (char *)base)
-#define PCM_P2R(base, p)    (PCM_OFF(base, p) % PCM_ROW_SIZE)
-#define PCM_P2B(base, p)    (PCM_OFF(base, p) % PCM_BANK_SIZE)
+#define PCM_P2R(base, p)    (PCM_OFF(base, p) / PCM_ROW_SIZE)
+#define PCM_P2B(base, p)    PCM_R2B(PCM_P2R(base, p))
 #define PCM_R2B(r)          (r % PCM_NUM_BANKS)
 #define PCM_R2P(base, r)    ((char *)base + (r * PCM_ROW_SIZE))
 
@@ -36,6 +36,8 @@ struct pcm_thread {
 	unsigned long long num_rows;
 	void * rows[PCM_ROWS_PER_BANK_MAX];
 };
+
+void pcm_thread_print(struct pcm_thread pcm_threads[], int num_threads, char* base);
 
 void pcm_param(int argc, char* argv[], char* usage);
 

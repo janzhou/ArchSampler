@@ -194,3 +194,16 @@ void pcm_print_t2r(int num_threads, int rows[])
 		fprintf(stderr, "\n");
 	}
 }
+
+void pcm_thread_print(struct pcm_thread pcm_threads[], int num_threads, char* base) {
+	int t, r;
+	for (t = 0; t < num_threads; t++) {
+		struct pcm_thread *pth = pcm_threads + t;
+		fprintf(stderr, "thread %d: ", t);
+		for (r = 0; r < pth->num_rows; r++) {
+			void * row = pth->rows[r];
+			fprintf(stderr, "%u/%u ", PCM_P2R(base, row), PCM_P2B(base, row));
+		}
+		fprintf(stderr, "\n");
+	}
+}
