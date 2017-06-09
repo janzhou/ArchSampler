@@ -27,7 +27,12 @@ unsigned long write_fn(void* row) {
 
 int main(int argc, char *argv[])
 {
-	pcm_param(argc, argv, "-p <repeat>\n-s <sample>\n-a bank aware shuffle\n-c contention free threads\n-w <workload> 1: amazon_movie; 2: movielens; 3: write; 4: read;\n");
+	pcm_param(argc, argv,
+	"-p <repeat>\n"
+	"-s <sample>\n"
+	"-a <shuffle pattern> (0: Random shuffle, 1: Bank-aware shuffle-1, 2: Bank-aware shuffle-2)\n"
+	"-c contention free threads\n"
+	"-w <workload> 1: amazon_movie; 2: movielens; 3: write; 4: read;\n");
 
 	int option;
 	int sample = PCM_NUM_ROWS;
@@ -42,13 +47,13 @@ int main(int argc, char *argv[])
 	void (* count_reset)() = NULL;
 	unsigned long (* count_get)() = NULL;
 
-	while ((option = getopt(argc, argv,"acs:p:w:")) != -1) {
+	while ((option = getopt(argc, argv,"a:cs:p:w:")) != -1) {
 		switch (option) {
 			case 'p' : repeat = atoi(optarg);
 				   break;
 			case 's' : sample = atoi(optarg);
 				   break;
-			case 'a' : bank_aware_shuffle = 1;
+			case 'a' : bank_aware_shuffle = atoi(optarg);
 				   break;
 			case 'c' : contention_free_r2t = 1;
 				   break;
@@ -110,10 +115,19 @@ int main(int argc, char *argv[])
 			return errno;
 	}
 
-	if(bank_aware_shuffle == 0) {
-		pcm_rows_shuffle(rows, PCM_NUM_ROWS);
-	} else {
-		pcm_rows_bank_aware_shuffle(rows, PCM_NUM_ROWS);
+	switch (bank_aware_shuffle) {
+		case 2: pcm_rows_bank_aware_shuffle2(rows, PCM_NUM_ROWS);
+			printf("Bank-aware Shuffle-2\n");
+			break;
+
+		case 1: pcm_rows_bank_aware_shuffle(rows, PCM_NUM_ROWS);
+			printf("Bank-aware Shuffle-1\n");
+			break;
+
+		case 0:
+		default: pcm_rows_shuffle(rows, PCM_NUM_ROWS);
+			printf("Random Shuffle\n");
+			break;
 	}
 
 	assert(sample * repeat <= PCM_NUM_ROWS);
