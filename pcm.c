@@ -188,7 +188,7 @@ void pcm_thread_print(struct pcm_thread pcm_threads[], int num_threads, char* ba
 		fprintf(stderr, "thread %d: ", t);
 		for (r = 0; r < pth->num_rows; r++) {
 			void * row = pth->rows[r];
-			fprintf(stderr, "%u/%u ", PCM_P2R(base, row), PCM_P2B(base, row));
+			fprintf(stderr, "%lu/%lu ", PCM_P2R(base, row), PCM_P2B(base, row));
 		}
 		fprintf(stderr, "\n");
 	}
