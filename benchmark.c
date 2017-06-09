@@ -80,6 +80,8 @@ int main(int argc, char *argv[])
 		case 4:
 			count_map = read_fn;
 			break;
+		case 5: init_mem = amazon_movies_init_mem;
+			count_map = amazon_movies_capitalize_review;
 	}
 
 	char *buf;
