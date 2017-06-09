@@ -118,6 +118,10 @@ int main(int argc, char *argv[])
 
 	assert(sample * repeat <= PCM_NUM_ROWS);
 
+#ifdef PCM_DEBUG
+	pcm_print_row_shuffle(rows);
+#endif
+
 	ariel_enable();
 
 	for(; repeat > 0; repeat--){
@@ -127,6 +131,10 @@ int main(int argc, char *argv[])
 		} else {
 			pcm_r2t_contention_free(pcm_threads, PCM_NUM_BANKS, rows + skip, sample, buf);
 		}
+
+#ifdef PCM_DEBUG
+		pcm_print_t2r(sample, rows);
+#endif
 
 		int banks[PCM_NUM_BANKS], b, max;
 		for(b = 0; b < PCM_NUM_BANKS; b++) {
