@@ -188,7 +188,7 @@ void pcm_print_t2r(int num_threads, int rows[])
 	for (t = 0; t < PCM_NUM_BANKS; t++) {
 		fprintf(stderr, "thread-%d : ", t);
 		for(r = 0; r < rows_in_thread; r++) {
-			fprintf(stderr, "%d ", rows[t * rows_in_thread + r]);
+			fprintf(stderr, "%d(b%d) ", rows[t * rows_in_thread + r], PCM_R2B(rows[t * rows_in_thread + r]));
 		}
 
 		fprintf(stderr, "\n");
