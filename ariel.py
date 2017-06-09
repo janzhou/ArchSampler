@@ -145,11 +145,12 @@ ariel.addParams({
     "arielmode" : 0,
     "max_insts" : 100000000,
 # ARGUMENTS
-    "appargcount" : 4,
+    "appargcount" : 5,
     "apparg0" : "-b" + str(num_banks),
     "apparg1" : "-r" + str(num_rows),
     "apparg2" : "-" + str(opts),
     "apparg3" : "-w" + str(wrkld),
+    "apparg4" : "-p1",
     "executable" : Executable
 })
 
