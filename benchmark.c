@@ -96,6 +96,16 @@ int main(int argc, char *argv[])
 		return errno;
 	}
 
+	#ifdef PCM_DEBUG
+	printf("buf: %p - %p\n", buf, buf + PCM_SIZE);
+#endif
+
+	posix_memalign((void **) &buf, PCM_ROW_SIZE, PCM_SIZE);
+
+#ifdef PCM_DEBUG
+	printf("aligned_buf: %p - %p\n", buf, buf + PCM_SIZE);
+#endif
+
 	//struct pcm_thread pcm_threads[PCM_NUM_BANKS];
 	struct pcm_thread *pcm_threads;
 	pcm_threads = (struct pcm_thread *) calloc(PCM_NUM_BANKS, sizeof (*pcm_threads));
