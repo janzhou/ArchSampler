@@ -159,7 +159,6 @@ int main(int argc, char *argv[])
 		}
 
 #ifdef PCM_DEBUG
-		pcm_print_t2r(sample, rows);
 		pcm_thread_print(pcm_threads, PCM_NUM_BANKS, buf);
 #endif
 

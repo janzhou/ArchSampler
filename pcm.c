@@ -181,20 +181,6 @@ void pcm_print_row_shuffle(int rows[])
 		fprintf(stderr, "row[%d]: %d (%d->%d)\n", r, rows[r], r % PCM_NUM_BANKS, rows[r] % PCM_NUM_BANKS);
 }
 
-void pcm_print_t2r(int num_threads, int rows[])
-{
-	int r, t, rows_in_thread = num_threads / PCM_NUM_BANKS;
-
-	for (t = 0; t < PCM_NUM_BANKS; t++) {
-		fprintf(stderr, "thread-%d : ", t);
-		for(r = 0; r < rows_in_thread; r++) {
-			fprintf(stderr, "%d(b%d) ", rows[t * rows_in_thread + r], PCM_R2B(rows[t * rows_in_thread + r]));
-		}
-
-		fprintf(stderr, "\n");
-	}
-}
-
 void pcm_thread_print(struct pcm_thread pcm_threads[], int num_threads, char* base) {
 	int t, r;
 	for (t = 0; t < num_threads; t++) {

@@ -65,7 +65,6 @@ void pcm_r2t_contention_free(struct pcm_thread pths[], int num_threads, int rows
 void pcm_r2t_even_split(struct pcm_thread pths[], int num_threads, int rows[], int num_rows, void * buf);
 
 void pcm_print_row_shuffle(int rows[]);
-void pcm_print_t2r(int num_threads, int rows[]);
 
 
 #endif /* PCM_H_ */
