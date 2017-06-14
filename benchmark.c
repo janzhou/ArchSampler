@@ -3,6 +3,7 @@
 #include "amazon_movies_trim.h"
 #include "movie.h"
 #include "arielapi.h"
+#include <limits.h>
 #include <assert.h>
 
 struct pcm_thread pcm_threads[PCM_NUM_BANKS_MAX];
@@ -179,8 +180,9 @@ int main(int argc, char *argv[])
 
 	ariel_enable();
 
-	for(; repeat > 0; repeat--){
-		int skip = sample * ( repeat - 1 );
+	unsigned int results[repeat], repeat_loop, result_sum = 0, result_avg, result_min = UINT_MAX, result_max = 0;
+	for(repeat_loop = 0; repeat_loop < repeat; repeat_loop++){
+		int skip = sample * repeat_loop;
 		if(contention_free_r2t == 0) {
 			pcm_r2t_even_split(pcm_threads, num_threads, rows + skip, sample, buf);
 		} else {
@@ -237,8 +239,18 @@ int main(int argc, char *argv[])
 		}
 
 		if(count_get != NULL) {
-			printf("count: %lu\n", (*count_get)());
+			unsigned int result = (*count_get)();
+			result_sum += result;
+			result_min = result_min <= result ? result_min : result;
+			result_max = result_max >= result ? result_max : result;
+			results[repeat_loop] = result;
+			printf("count: %u\n", result);
 		}
+	}
+
+	if(repeat > 1 && count_get != NULL) {
+		result_avg = result_sum/repeat;
+		printf("result avg/min/max: %u/%u/%u\n", result_avg, result_min, result_max);
 	}
 
 	free(buf);
