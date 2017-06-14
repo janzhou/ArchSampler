@@ -4,6 +4,8 @@
 #include "arielapi.h"
 #include <assert.h>
 
+struct pcm_thread pcm_threads[PCM_NUM_BANKS_MAX];
+
 unsigned long int read_fn(void* row){
 	unsigned long i = 0;
 	int *buf = (int *) row;
@@ -106,13 +108,13 @@ int main(int argc, char *argv[])
 	printf("aligned_buf: %p - %p\n", buf, buf + PCM_SIZE);
 #endif
 
-	//struct pcm_thread pcm_threads[PCM_NUM_BANKS];
-	struct pcm_thread *pcm_threads;
-	pcm_threads = (struct pcm_thread *) calloc(PCM_NUM_BANKS, sizeof (*pcm_threads));
-	if (!pcm_threads) {
-		perror("Failed to allocate thread memory");
-		return errno;
-	}
+
+//	struct pcm_thread *pcm_threads;
+//	pcm_threads = (struct pcm_thread *) calloc(PCM_NUM_BANKS, sizeof (*pcm_threads));
+//	if (!pcm_threads) {
+//		perror("Failed to allocate thread memory");
+//		return errno;
+//	}
 
 	int rows[PCM_NUM_ROWS], r;
 	for(r = 0; r < PCM_NUM_ROWS; r++) {
