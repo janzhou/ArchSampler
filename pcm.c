@@ -2,6 +2,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <getopt.h>
+#include <assert.h>
 
 int PCM_NUM_BANKS = PCM_NUM_BANKS_MAX;
 int PCM_ROWS_PER_BANK = PCM_ROWS_PER_BANK_MAX;
@@ -46,11 +47,24 @@ void *pcm_thread_func(void *data)
 	struct pcm_thread *pcm_thread = (struct pcm_thread *) data;
 
 	int i;
-	for(i = 0; i < pcm_thread->num_rows; i++){
-		if(pcm_thread->count_fn != NULL){
-			pcm_thread->count += pcm_thread->count_fn(pcm_thread->rows[i]);
-		} else if(pcm_thread->fn != NULL){
-			pcm_thread->fn(pcm_thread->rows[i]);
+
+	if(pcm_thread->sort_odd != NULL) {
+		assert(pcm_thread->num_rows % 2 == 0);
+		for(i = 1; i < pcm_thread->num_rows; i += 2){
+			pcm_thread->sort_odd(pcm_thread->rows[i], pcm_thread->rows[i + 1]);
+		}
+	} else if(pcm_thread->sort_even != NULL){
+		assert(pcm_thread->num_rows % 2 == 0);
+		for(i = 0; i < pcm_thread->num_rows; i += 2){
+			pcm_thread->sort_even(pcm_thread->rows[i], pcm_thread->rows[i + 1]);
+		}
+	} else {
+		for(i = 0; i < pcm_thread->num_rows; i++){
+			if(pcm_thread->count_fn != NULL){
+				pcm_thread->count += pcm_thread->count_fn(pcm_thread->rows[i]);
+			} else if(pcm_thread->fn != NULL){
+				pcm_thread->fn(pcm_thread->rows[i]);
+			}
 		}
 	}
 

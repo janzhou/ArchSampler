@@ -30,6 +30,8 @@ extern int PCM_ROWS_PER_BANK;
 
 struct pcm_thread {
 	pthread_t pthread;
+	void (* sort_odd)(void *left, void *right);
+	void (* sort_even)(void *left, void *right);
 	unsigned long (* count_fn)(void *row);
 	unsigned long count;
 	void (* fn)(void *row);
