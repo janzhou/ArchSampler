@@ -16,5 +16,6 @@ struct amazon_movie_review_trim
 };
 
 int amazon_movies_trim_init_mem(char *mem);
+void amazon_movies_trim_sort_local(void *row);
 
 #endif /* AMAZON_MOVIES_TRIM_H_ */

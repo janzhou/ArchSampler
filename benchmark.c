@@ -48,6 +48,7 @@ int main(int argc, char *argv[])
 	int workload = 0;
 	int (* init_mem)(char *mem) = NULL;
 	unsigned long (* count_map)(void *row) = NULL;
+	void (* fn_map)(void *row) = NULL;
 	void (* count_reduce)(unsigned long local_cnt) = NULL;
 	void (* count_reset)() = NULL;
 	unsigned long (* count_get)() = NULL;
@@ -98,6 +99,7 @@ int main(int argc, char *argv[])
 			count_map = amazon_movies_capitalize_review;
 			break;
 		case 6: init_mem = amazon_movies_trim_init_mem;
+			fn_map = amazon_movies_trim_sort_local;
 	}
 
 	char *buf;
@@ -189,6 +191,8 @@ int main(int argc, char *argv[])
 		if(count_map != NULL) {
 			pcm_threads_map(pcm_threads, num_threads, count_fn, count_map);	
 //			pcm_threads_map(pcm_threads, num_threads, fn, amazon_movies_sort_reviews);
+		} else if (fn_map != NULL) {
+			pcm_threads_map(pcm_threads, num_threads, fn, fn_map);
 		}
 
 		if(count_reset != NULL) {
