@@ -55,6 +55,26 @@ void pcm_threads_reduce_count_fn(
 		void (* count_reduce)(unsigned long count)
 		);
 
+#define pcm_threads_map(pcm_threads, num_threads, call_fn, call_ptr) \
+{ \
+	int i; \
+	for(i = 0; i < num_threads; i++) { \
+		pcm_threads[i].count_fn = NULL; \
+		pcm_threads[i].count = 0; \
+		pcm_threads[i].fn = NULL; \
+		pcm_threads[i].call_fn = call_ptr; \
+	} \
+	pcm_threads_run(pcm_threads, num_threads); \
+}
+
+#define pcm_threads_reduce(pcm_threads, num_threads, call_val, call_ptr) \
+{ \
+	int i; \
+	for(i = 0; i < num_threads; i++) { \
+		(call_ptr)(pcm_threads[i].call_val); \
+	} \
+}
+
 void pcm_threads_run(struct pcm_thread pcm_threads[], int num_threads);
 void pcm_rows_shuffle(int rows[], int num_rows);
 void pcm_rows_bank_aware_shuffle(int rows[], int num_rows);

@@ -184,16 +184,15 @@ int main(int argc, char *argv[])
 #endif
 
 		if(count_map != NULL) {
-			pcm_threads_map_count_fn(pcm_threads, num_threads, count_map);	
+			pcm_threads_map(pcm_threads, num_threads, count_fn, count_map);	
 		}
-		pcm_threads_run(pcm_threads, num_threads);
 
 		if(count_reset != NULL) {
 			(* count_reset)();
 		}
 
 		if(count_reduce != NULL) {
-			pcm_threads_reduce_count_fn(pcm_threads, num_threads, count_reduce);
+			pcm_threads_reduce(pcm_threads, num_threads, count, count_reduce);
 		}
 
 		if(count_get != NULL) {
