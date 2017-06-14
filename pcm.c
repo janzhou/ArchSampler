@@ -151,9 +151,21 @@ void pcm_r2t_contention_free(struct pcm_thread pths[], int num_threads, int rows
 	for(t = 0; t < num_threads; t++) {
 		pths[t].num_rows = 0;
 	}
-	for(r = 0; r < num_rows; r++) {
-		t = PCM_R2B(r) % num_threads;
-		pcm_thread_add_row(pths + t, buf, rows[r]);
+	if(PCM_NUM_BANKS >= num_threads) {
+		for(r = 0; r < num_rows; r++) {
+			t = PCM_R2B(r) % num_threads;
+			pcm_thread_add_row(pths + t, buf, rows[r]);
+		}
+	} else {
+		int threads_per_bank = num_threads / PCM_NUM_BANKS;
+		int rows_in_bank[PCM_NUM_BANKS];
+		for(r = 0; r < num_rows; r++) {
+			int b = PCM_R2B(r);
+			int off = rows_in_bank[b] % threads_per_bank;
+			t = b * threads_per_bank + off;
+			pcm_thread_add_row(pths + t, buf, rows[r]);
+			rows_in_bank[b]++;
+		}
 	}
 }
 
