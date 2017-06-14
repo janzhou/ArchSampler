@@ -1,5 +1,6 @@
 #include "pcm.h"
 #include "amazon_movies.h"
+#include "amazon_movies_trim.h"
 #include "movie.h"
 #include "arielapi.h"
 #include <assert.h>
@@ -95,6 +96,8 @@ int main(int argc, char *argv[])
 			break;
 		case 5: init_mem = amazon_movies_init_mem;
 			count_map = amazon_movies_capitalize_review;
+			break;
+		case 6: init_mem = amazon_movies_trim_init_mem;
 	}
 
 	char *buf;
@@ -185,6 +188,7 @@ int main(int argc, char *argv[])
 
 		if(count_map != NULL) {
 			pcm_threads_map(pcm_threads, num_threads, count_fn, count_map);	
+//			pcm_threads_map(pcm_threads, num_threads, fn, amazon_movies_sort_reviews);
 		}
 
 		if(count_reset != NULL) {
