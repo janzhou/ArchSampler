@@ -137,3 +137,25 @@ void amazon_movies_trim_sort_local(void *row)
 
 	amazon_movies_trim_quick_sort(review, 0, n - 1);
 }
+
+void amazon_movies_trim_merge(void *left, void *right)
+{
+	struct amazon_movie_review_trim *review_l = left;
+	struct amazon_movie_review_trim *review_r = right;
+
+	int i;
+	int n = PCM_ROW_SIZE / sizeof(*review_l);
+
+	for (i = n - 1; i >= 0; i--) {
+		int j;
+		unsigned long last = review_l[n - 1].time;
+
+		for (j = n - 2; j >= 0 && review_l[j].time > review_r[i].time; j--)
+			review_l[j + 1] = review_l[j];
+
+		if (j != n - 2 || last > review_r[i].time) {
+			review_l[j + 1] = review_r[i];
+			review_r[i].time = last;
+		}
+	}
+}
