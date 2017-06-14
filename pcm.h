@@ -77,6 +77,14 @@ void pcm_threads_reduce_count_fn(
 	} \
 }
 
+#define pcm_threads_reset_func(pcm_threads, num_threads, reset_func) \
+{ \
+	int i; \
+	for(i = 0; i < num_threads; i++) { \
+		pcm_threads[i].reset_func = NULL; \
+	} \
+} \
+
 void pcm_threads_run(struct pcm_thread pcm_threads[], int num_threads);
 void pcm_rows_shuffle(int rows[], int num_rows);
 void pcm_rows_bank_aware_shuffle(int rows[], int num_rows);
