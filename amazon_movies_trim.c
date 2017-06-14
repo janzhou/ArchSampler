@@ -3,6 +3,24 @@
 
 //#define AMAZON_MOVIES_TRIM_DEBUG
 
+void amazon_movies_trim_print(struct amazon_movie_review_trim *review)
+{
+	int i;
+	int n_reviews_per_row = PCM_ROW_SIZE / sizeof(*review);
+
+	for (i = 0; i < n_reviews_per_row; i++) {
+
+		if (!strcmp(review->product_id, ""))
+			return;
+
+		printf("%s::%s::%s::%s::%.1f::%lu\n\n\n",
+				review->product_id, review->user_id, review->profile_name,
+				review->helpfulness, review->score, review->time);
+
+		review++;
+	}
+}
+
 int amazon_movies_trim_init_mem(char *mem)
 {
 	int i, j;
@@ -64,18 +82,7 @@ int amazon_movies_trim_init_mem(char *mem)
 	for (j = 0; j < PCM_NUM_ROWS; j++) {
 
 		review = (struct amazon_movie_review_trim *) (mem + j * PCM_ROW_SIZE);
-
-		for (i = 0; i < n_reviews_per_row; i++) {
-
-			if (!strcmp(review->product_id, ""))
-				return 0;
-
-			printf("%s::%s::%s::%s::%.1f::%lu\n\n\n",
-					review->product_id, review->user_id, review->profile_name,
-					review->helpfulness, review->score, review->time);
-
-			review++;
-		}
+		amazon_movies_trim_print(review);
 	}
 #endif
 
