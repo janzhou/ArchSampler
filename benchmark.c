@@ -32,6 +32,7 @@ int main(int argc, char *argv[])
 	pcm_param(argc, argv,
 	"-p <repeat>\n"
 	"-s <sample>\n"
+	"-t <num_threads>\n"
 	"-a <shuffle pattern> (0: Random shuffle, 1: Bank-aware shuffle-1, 2: Bank-aware shuffle-2, 3: No shuffle)\n"
 	"-c contention free threads\n"
 	"-w <workload> 1: amazon_movie; 2: movielens; 3: write; 4: read;\n");
@@ -41,6 +42,7 @@ int main(int argc, char *argv[])
 	int repeat = 1;
 	int bank_aware_shuffle = 0;
 	int contention_free_r2t = 0;
+	unsigned int num_threads = 0;
 
 	int workload = 0;
 	int (* init_mem)(char *mem) = NULL;
@@ -60,10 +62,14 @@ int main(int argc, char *argv[])
 			case 'c' : contention_free_r2t = 1;
 				   break;
 			case 'w' : workload = atoi(optarg);
+			case 't' : num_threads = atoi(optarg);
 			case '?' :
 			case 0 : break;
 		}
 	}
+
+	if(num_threads == 0) num_threads = PCM_NUM_BANKS;
+	assert(num_threads <= PCM_NUM_BANKS_MAX);
 
 	switch(workload) {
 		default:
@@ -98,7 +104,7 @@ int main(int argc, char *argv[])
 		return errno;
 	}
 
-	#ifdef PCM_DEBUG
+#ifdef PCM_DEBUG
 	printf("buf: %p - %p\n", buf, buf + PCM_SIZE);
 #endif
 
@@ -107,7 +113,6 @@ int main(int argc, char *argv[])
 #ifdef PCM_DEBUG
 	printf("aligned_buf: %p - %p\n", buf, buf + PCM_SIZE);
 #endif
-
 
 //	struct pcm_thread *pcm_threads;
 //	pcm_threads = (struct pcm_thread *) calloc(PCM_NUM_BANKS, sizeof (*pcm_threads));
@@ -155,15 +160,13 @@ int main(int argc, char *argv[])
 	for(; repeat > 0; repeat--){
 		int skip = sample * ( repeat - 1 );
 		if(contention_free_r2t == 0) {
-			pcm_r2t_even_split(pcm_threads, PCM_NUM_BANKS, rows + skip, sample, buf);
+			pcm_r2t_even_split(pcm_threads, num_threads, rows + skip, sample, buf);
 		} else {
-			pcm_r2t_contention_free(pcm_threads, PCM_NUM_BANKS, rows + skip, sample, buf);
+			pcm_r2t_contention_free(pcm_threads, num_threads, rows + skip, sample, buf);
 		}
 
 #ifdef PCM_DEBUG
-		pcm_thread_print(pcm_threads, PCM_NUM_BANKS, buf);
-
-
+		pcm_thread_print(pcm_threads, num_threads, buf);
 
 		int banks[PCM_NUM_BANKS], b, max;
 		for(b = 0; b < PCM_NUM_BANKS; b++) {
@@ -181,16 +184,16 @@ int main(int argc, char *argv[])
 #endif
 
 		if(count_map != NULL) {
-			pcm_threads_map_count_fn(pcm_threads, PCM_NUM_BANKS, count_map);	
+			pcm_threads_map_count_fn(pcm_threads, num_threads, count_map);	
 		}
-		pcm_threads_run(pcm_threads, PCM_NUM_BANKS);
+		pcm_threads_run(pcm_threads, num_threads);
 
 		if(count_reset != NULL) {
 			(* count_reset)();
 		}
 
 		if(count_reduce != NULL) {
-			pcm_threads_reduce_count_fn(pcm_threads, PCM_NUM_BANKS, count_reduce);
+			pcm_threads_reduce_count_fn(pcm_threads, num_threads, count_reduce);
 		}
 
 		if(count_get != NULL) {
