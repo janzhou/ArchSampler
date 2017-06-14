@@ -30,6 +30,8 @@ extern int PCM_ROWS_PER_BANK;
 
 struct pcm_thread {
 	pthread_t pthread;
+	void (* sort_odd)(void *left, void *right);
+	void (* sort_even)(void *left, void *right);
 	unsigned long (* count_fn)(void *row);
 	unsigned long count;
 	void (* fn)(void *row);
@@ -54,6 +56,34 @@ void pcm_threads_reduce_count_fn(
 		struct pcm_thread pcm_threads[], int num_threads,
 		void (* count_reduce)(unsigned long count)
 		);
+
+#define pcm_threads_map(pcm_threads, num_threads, call_fn, call_ptr) \
+{ \
+	int i; \
+	for(i = 0; i < num_threads; i++) { \
+		pcm_threads[i].count_fn = NULL; \
+		pcm_threads[i].count = 0; \
+		pcm_threads[i].fn = NULL; \
+		pcm_threads[i].call_fn = call_ptr; \
+	} \
+	pcm_threads_run(pcm_threads, num_threads); \
+}
+
+#define pcm_threads_reduce(pcm_threads, num_threads, call_val, call_ptr) \
+{ \
+	int i; \
+	for(i = 0; i < num_threads; i++) { \
+		(call_ptr)(pcm_threads[i].call_val); \
+	} \
+}
+
+#define pcm_threads_reset_func(pcm_threads, num_threads, reset_func) \
+{ \
+	int i; \
+	for(i = 0; i < num_threads; i++) { \
+		pcm_threads[i].reset_func = NULL; \
+	} \
+} \
 
 void pcm_threads_run(struct pcm_thread pcm_threads[], int num_threads);
 void pcm_rows_shuffle(int rows[], int num_rows);

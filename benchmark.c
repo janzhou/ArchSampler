@@ -1,5 +1,6 @@
 #include "pcm.h"
 #include "amazon_movies.h"
+#include "amazon_movies_trim.h"
 #include "movie.h"
 #include "arielapi.h"
 #include <assert.h>
@@ -27,6 +28,23 @@ unsigned long write_fn(void* row) {
 	return i;
 }
 
+void benchmark_sort(int num_threads)
+{
+	int i;
+	int n = PCM_NUM_ROWS * PCM_ROW_SIZE / sizeof(struct amazon_movie_review_trim);
+
+	// Treat odd-even as one phase
+	n = n / 2;
+
+	for (i = 0; i < n; i++) {
+		pcm_threads_map(pcm_threads, num_threads, sort_even, amazon_movies_trim_merge);
+		pcm_threads_reset_func(pcm_threads, num_threads, sort_even);
+
+		pcm_threads_map(pcm_threads, num_threads - 1, sort_odd, amazon_movies_trim_merge);
+		pcm_threads_reset_func(pcm_threads, num_threads, sort_odd);
+	}
+}
+
 int main(int argc, char *argv[])
 {
 	pcm_param(argc, argv,
@@ -47,6 +65,7 @@ int main(int argc, char *argv[])
 	int workload = 0;
 	int (* init_mem)(char *mem) = NULL;
 	unsigned long (* count_map)(void *row) = NULL;
+	void (* fn_map)(void *row) = NULL;
 	void (* count_reduce)(unsigned long local_cnt) = NULL;
 	void (* count_reset)() = NULL;
 	unsigned long (* count_get)() = NULL;
@@ -95,6 +114,9 @@ int main(int argc, char *argv[])
 			break;
 		case 5: init_mem = amazon_movies_init_mem;
 			count_map = amazon_movies_capitalize_review;
+			break;
+		case 6: init_mem = amazon_movies_trim_init_mem;
+			fn_map = amazon_movies_trim_sort_local;
 	}
 
 	char *buf;
@@ -184,16 +206,34 @@ int main(int argc, char *argv[])
 #endif
 
 		if(count_map != NULL) {
-			pcm_threads_map_count_fn(pcm_threads, num_threads, count_map);	
+			pcm_threads_map(pcm_threads, num_threads, count_fn, count_map);	
+//			pcm_threads_map(pcm_threads, num_threads, fn, amazon_movies_sort_reviews);
 		}
-		pcm_threads_run(pcm_threads, num_threads);
+
+		if (fn_map != NULL) {
+			pcm_threads_map(pcm_threads, num_threads, fn, fn_map);
+		}
+
+		// Sorting
+		if (workload == 6) {
+			benchmark_sort(num_threads);
+
+			// Debug
+			int j;
+			struct amazon_movie_review_trim *review;
+
+			for (j = 0; j < PCM_NUM_ROWS; j++) {
+				review = (struct amazon_movie_review_trim *) (buf + j * PCM_ROW_SIZE);
+				amazon_movies_trim_print(review);
+			}
+		}
 
 		if(count_reset != NULL) {
 			(* count_reset)();
 		}
 
 		if(count_reduce != NULL) {
-			pcm_threads_reduce_count_fn(pcm_threads, num_threads, count_reduce);
+			pcm_threads_reduce(pcm_threads, num_threads, count, count_reduce);
 		}
 
 		if(count_get != NULL) {
