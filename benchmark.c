@@ -8,7 +8,7 @@
 
 struct pcm_thread pcm_threads[PCM_NUM_BANKS_MAX];
 
-unsigned long int read_fn(void* row){
+void read_fn(void* row){
 	unsigned long i = 0;
 	int *buf = (int *) row;
 	int sum = 0;
@@ -17,16 +17,14 @@ unsigned long int read_fn(void* row){
 	}
 
 	//printf("%d\n", sum);
-	return i;
 }
 
-unsigned long write_fn(void* row) {
+void write_fn(void* row) {
 	unsigned long i = 0;
 	int *buf = (int *) row;
 	for(i = 0; i < PCM_ROW_SIZE/sizeof(int); i++){
 		buf[i] = i;
 	}
-	return i;
 }
 
 void benchmark_sort(int num_threads)
@@ -108,10 +106,10 @@ int main(int argc, char *argv[])
 			count_reset = pcm_movie_db_reset_global_cnt;
 			break;
 		case 3:
-			count_map = write_fn;
+			fn_map = write_fn;
 			break;
 		case 4:
-			count_map = read_fn;
+			fn_map = read_fn;
 			break;
 		case 5: init_mem = amazon_movies_init_mem;
 			count_map = amazon_movies_capitalize_review;
