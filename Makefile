@@ -9,7 +9,7 @@ all: thread_write.exe thread_read.exe movie_count.exe movie_count2.exe amazon_mo
 %.exe: %.o pcm.o movie.o arielapi.o amazon_movies.o amazon_movies_trim.o
 	$(CXX) -o $@ $^ -L$(LIBS_PATH) -I$(INCLUDE_PATH)  $(LIBS) $(COPS)
 
-%.o: %.c pcm.h movie.h arielapi.h amazon_movies.h amazon_movies_trim.o
+%.o: %.c pcm.h movie.h arielapi.h amazon_movies.h amazon_movies_trim.h
 	$(CXX) -o $@ -c $< -L$(LIBS_PATH) -I$(INCLUDE_PATH)  $(LIBS) $(COPS)
 
 clean:
