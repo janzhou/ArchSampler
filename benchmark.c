@@ -162,7 +162,7 @@ int main(int argc, char *argv[])
 
 #ifdef PCM_DEBUG
 		pcm_thread_print(pcm_threads, PCM_NUM_BANKS, buf);
-#endif
+
 
 
 		int banks[PCM_NUM_BANKS], b, max;
@@ -178,6 +178,7 @@ int main(int argc, char *argv[])
 		}
 
 		printf("sampling ratio: %f; load max/avg(%d/%d): %f;\n", (float)sample/PCM_NUM_ROWS, max, sample/PCM_NUM_BANKS, (float)max/(sample/PCM_NUM_BANKS));
+#endif
 
 		if(count_map != NULL) {
 			pcm_threads_map_count_fn(pcm_threads, PCM_NUM_BANKS, count_map);	
