@@ -96,27 +96,25 @@ void amazon_movies_trim_swap(
 {
 	struct amazon_movie_review_trim temp_review;
 
-	memset(&temp_review, 0, sizeof(temp_review));
-
-	memcpy(&temp_review, review1, sizeof(*review1));
-	memcpy(review1, review2, sizeof(*review1));
-	memcpy(review2, &temp_review, sizeof(*review1));
+	temp_review = *review1;
+	*review1 = *review2;
+	*review2 = temp_review;
 }
 
 int partition(
 		struct amazon_movie_review_trim *review, int l, int h)
 {
-	int i, j;
+	int j, i = l - 1;
 	unsigned long pivot = review[h].time;
 
 	for (j = l; j <= h - 1; j++) {
-		if (review[j].time <= pivot) {
+		if (review[j].time >= pivot) {
 			i++;
 			amazon_movies_trim_swap(&review[i], &review[j]);
 		}
 	}
 
-	amazon_movies_trim_swap(&review[i], &review[j]);
+	amazon_movies_trim_swap(&review[i + 1], &review[h]);
 	return i + 1;
 }
 
@@ -134,7 +132,7 @@ void amazon_movies_trim_quick_sort(
 
 void amazon_movies_trim_sort_local(void *row)
 {
-	struct amazon_movie_review_trim *review;
+	struct amazon_movie_review_trim *review = row;
 	int n = PCM_ROW_SIZE / sizeof(*review);
 
 	amazon_movies_trim_quick_sort(review, 0, n - 1);
