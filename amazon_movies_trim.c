@@ -108,7 +108,7 @@ int partition(
 	unsigned long pivot = review[h].time;
 
 	for (j = l; j <= h - 1; j++) {
-		if (review[j].time >= pivot) {
+		if (review[j].time <= pivot) {
 			i++;
 			amazon_movies_trim_swap(&review[i], &review[j]);
 		}
@@ -145,6 +145,9 @@ void amazon_movies_trim_merge(void *left, void *right)
 
 	int i;
 	int n = PCM_ROW_SIZE / sizeof(*review_l);
+
+	if (!(left && right))
+		return;
 
 	for (i = n - 1; i >= 0; i--) {
 		int j;
