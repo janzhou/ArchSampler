@@ -29,6 +29,8 @@ extern int PCM_ROWS_PER_BANK;
 //#define PCM_DEBUG
 
 struct pcm_thread {
+	int thread_id;
+	int num_threads;
 	pthread_t pthread;
 	int (* sort_odd)(void *left, void *right);
 	int (* sort_even)(void *left, void *right);
@@ -45,23 +47,13 @@ void pcm_thread_print(struct pcm_thread pcm_threads[], int num_threads, char* ba
 void pcm_param(int argc, char* argv[], char* usage);
 
 void pcm_thread_add_row(struct pcm_thread * pth, void * base, int row);
-void pcm_threads_map_fn(
-		struct pcm_thread pcm_threads[], int num_threads,
-		void (* fn)(void *row)
-		);
-void pcm_threads_map_count_fn(
-		struct pcm_thread pcm_threads[], int num_threads,
-		unsigned long (* count_fn)(void *row)
-		);
-void pcm_threads_reduce_count_fn(
-		struct pcm_thread pcm_threads[], int num_threads,
-		void (* count_reduce)(unsigned long count)
-		);
 
 #define pcm_threads_map(pcm_threads, num_threads, call_fn, call_ptr) \
 { \
 	int i; \
 	for(i = 0; i < num_threads; i++) { \
+		pcm_threads[i].thread_id = i; \
+		pcm_threads[i].num_threads = num_threads; \
 		pcm_threads[i].sort_odd = NULL; \
 		pcm_threads[i].sort_even = NULL; \
 		pcm_threads[i].sorted = 1; \

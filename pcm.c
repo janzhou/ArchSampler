@@ -106,37 +106,6 @@ void pcm_thread_add_row(struct pcm_thread * pth, void * base, int row) {
     pth->num_rows++;
 }
 
-void pcm_threads_map_fn(
-		struct pcm_thread pcm_threads[], int num_threads,
-		void (* fn)(void *row)
-		) {
-	int i;
-	for(i = 0; i < num_threads; i++) {
-		pcm_threads[i].fn = fn;
-	}
-}
-
-void pcm_threads_map_count_fn(
-		struct pcm_thread pcm_threads[], int num_threads,
-		unsigned long (* count_fn)(void *row)
-		) {
-	int i;
-	for(i = 0; i < num_threads; i++) {
-		pcm_threads[i].count_fn = count_fn;
-		pcm_threads[i].count = 0;
-	}
-}
-
-void pcm_threads_reduce_count_fn(
-		struct pcm_thread pcm_threads[], int num_threads,
-		void (* count_reduce)(unsigned long count)
-		){
-	int i;
-	for(i = 0; i < num_threads; i++) {
-		count_reduce(pcm_threads[i].count);
-	}
-}
-
 void pcm_rows_shuffle(int rows[], int num_rows) {
 	int r;
 	srand(time(NULL));
