@@ -23,11 +23,12 @@ void pcm_param(int argc, char* argv[], char* usage) {
 			case 'h' : printf("-m\t\topenmp flag\n-b <num_banks>\tthe number of banks\n-r <num_rows>\tthe number of rows in banks\n\n");
 				   if(usage != NULL) printf("%s", usage);
 				   exit(-1);
-			case '?': break;
-			case 0: break;
+			case '?':
+			case 0: goto pcm_param_return;
 		}
 	}
 
+pcm_param_return:
 	if( PCM_NUM_BANKS > PCM_NUM_BANKS_MAX ) {
 		printf("PCM_NUM_BANKS_MAX: %d\n", PCM_NUM_BANKS_MAX);
 		exit(-1);
