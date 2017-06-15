@@ -52,10 +52,10 @@ int main(int argc, char *argv[])
 	"-p <repeat>\n"
 	"-s <sample>\n"
 	"-t <num_threads>\n"
-	"-W <word_to_count>\n"
+	"-W <word_to_count> only work for -w1\n"
 	"-a <shuffle pattern> (0: Random shuffle, 1: Bank-aware shuffle-1, 2: Bank-aware shuffle-2, 3: No shuffle)\n"
 	"-c contention free threads\n"
-	"-w <workload> 1: amazon_movie; 2: movielens; 3: write; 4: read;\n");
+	"-w <workload> 1: amazon_movie; 2: movielens; 3: write; 4: read; 5: amazon_movies_capitalize; 6: amazon_movies_sort\n");
 
 	int option;
 	int sample = PCM_NUM_ROWS;

@@ -20,7 +20,15 @@ void pcm_param(int argc, char* argv[], char* usage) {
 				   break;
 			case 'r' : PCM_ROWS_PER_BANK = atoi(optarg);
 				   break;
-			case 'h' : printf("-m\t\topenmp flag\n-b <num_banks>\tthe number of banks\n-r <num_rows>\tthe number of rows in banks\n\n");
+			case 'h' : printf("%s",
+						   "pcm param:\n"
+						   "-m\t\topenmp flag\n"
+						   "-b <num_banks>\tthe number of banks\n"
+						   "-r <num_rows>\tthe number of rows in banks\n"
+						   "\n"
+						   "*** pcm params need to be set before any other params ***\n"
+						   "\n"
+					 );
 				   if(usage != NULL) printf("%s", usage);
 				   exit(-1);
 			case '?':
