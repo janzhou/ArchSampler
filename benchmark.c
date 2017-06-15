@@ -214,10 +214,7 @@ int main(int argc, char *argv[])
 
 			for (i = 0; i < n; i++) {
 				pcm_threads_map(pcm_threads, num_threads, sort_even, amazon_movies_trim_merge);
-				pcm_threads_reset_func(pcm_threads, num_threads, sort_even);
-
-				pcm_threads_map(pcm_threads, num_threads - 1, sort_odd, amazon_movies_trim_merge);
-				pcm_threads_reset_func(pcm_threads, num_threads, sort_odd);
+				pcm_threads_map(pcm_threads, num_threads, sort_odd, amazon_movies_trim_merge);
 			}
 
 			// Debug
