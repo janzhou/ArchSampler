@@ -205,12 +205,6 @@ int main(int argc, char *argv[])
 
 		// Sorting
 		if (workload == 6) {
-			int i;
-			int n = PCM_NUM_ROWS * PCM_ROW_SIZE / sizeof(struct amazon_movie_review_trim);
-
-			// Treat odd-even as one phase
-			n = n / 2;
-
 			int sorted = 0;
 			while(!sorted) {
 				sorted = 1;
@@ -218,15 +212,19 @@ int main(int argc, char *argv[])
 				pcm_threads_reduce_opt(pcm_threads, num_threads, sorted, &&, sorted);
 				pcm_threads_map(pcm_threads, num_threads, sort_odd, amazon_movies_trim_merge);
 				pcm_threads_reduce_opt(pcm_threads, num_threads, sorted, &&, sorted);
+				pcm_threads_map(pcm_threads, num_threads, sort_x, amazon_movies_trim_merge);
+				pcm_threads_reduce_opt(pcm_threads, num_threads, sorted, &&, sorted);
 			}
 
 			// Debug
-			int j;
+			int i, j;
 			struct amazon_movie_review_trim *review;
 
-			for (j = 0; j < pcm_threads[0].num_rows; j++) {
-				review = (struct amazon_movie_review_trim *) pcm_threads[0].rows[j];
-				amazon_movies_trim_print(review);
+			for (i = 0; i < num_threads; i++) {
+				for (j = 0; j < pcm_threads[i].num_rows; j++) {
+					review = (struct amazon_movie_review_trim *) pcm_threads[i].rows[j];
+					amazon_movies_trim_print(review);
+				}
 			}
 		}
 
