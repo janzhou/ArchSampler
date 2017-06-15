@@ -30,8 +30,9 @@ extern int PCM_ROWS_PER_BANK;
 
 struct pcm_thread {
 	pthread_t pthread;
-	void (* sort_odd)(void *left, void *right);
-	void (* sort_even)(void *left, void *right);
+	int (* sort_odd)(void *left, void *right);
+	int (* sort_even)(void *left, void *right);
+	int sorted;
 	unsigned long (* count_fn)(void *row);
 	unsigned long count;
 	void (* fn)(void *row);
@@ -61,6 +62,10 @@ void pcm_threads_reduce_count_fn(
 { \
 	int i; \
 	for(i = 0; i < num_threads; i++) { \
+		pcm_threads[i].sort_odd = NULL; \
+		pcm_threads[i].sort_even = NULL; \
+		pcm_threads[i].sorted = 1; \
+		pcm_threads[i].count_fn = NULL; \
 		pcm_threads[i].count_fn = NULL; \
 		pcm_threads[i].count = 0; \
 		pcm_threads[i].fn = NULL; \
@@ -74,6 +79,14 @@ void pcm_threads_reduce_count_fn(
 	int i; \
 	for(i = 0; i < num_threads; i++) { \
 		(call_ptr)(pcm_threads[i].call_val); \
+	} \
+}
+
+#define pcm_threads_reduce_opt(pcm_threads, num_threads, reduce_val, opt, opt_val) \
+{ \
+	int i; \
+	for(i = 0; i < num_threads; i++) { \
+		reduce_val = reduce_val opt pcm_threads[i].opt_val; \
 	} \
 }
 
