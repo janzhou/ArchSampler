@@ -57,29 +57,25 @@ void *pcm_thread_func(void *data)
 
 	int i;
 
-	if(pcm_thread->sort_odd != NULL) {
-		assert(pcm_thread->num_rows % 2 == 0);
-		assert(pcm_thread->num_threads % 2 == 0);
-		for(i = 1; i < pcm_thread->num_rows; i += 2){
-			pcm_thread->sorted = pcm_thread->sorted && pcm_thread->sort_odd(pcm_thread->rows[i], pcm_thread->rows[i + 1]);
-		}
-	} else if(pcm_thread->sort_even != NULL){
-		assert(pcm_thread->num_rows % 2 == 0);
-		assert(pcm_thread->num_threads % 2 == 0);
-		for(i = 0; i < pcm_thread->num_rows; i += 2){
-			pcm_thread->sorted = pcm_thread->sorted && pcm_thread->sort_even(pcm_thread->rows[i], pcm_thread->rows[i + 1]);
-		}
-	} else if(pcm_thread->sort_x != NULL){
+	if(pcm_thread->merge_sort != NULL) {
 		assert(pcm_thread->num_rows % 2 == 0);
 		assert(pcm_thread->num_threads % 2 == 0);
 
+		for(i = 0; i < pcm_thread->num_rows; i += 2){
+			pcm_thread->sorted = pcm_thread->sorted && pcm_thread->merge_sort(pcm_thread->rows[i], pcm_thread->rows[i + 1]);
+		}
+
+		for(i = 1; i < pcm_thread->num_rows; i += 2){
+			pcm_thread->sorted = pcm_thread->sorted && pcm_thread->merge_sort(pcm_thread->rows[i], pcm_thread->rows[i + 1]);
+		}
+
 		if(pcm_thread->thread_id + 1 == pcm_thread->num_threads) {
-			pcm_thread->sorted = pcm_thread->sorted && pcm_thread->sort_x(
+			pcm_thread->sorted = pcm_thread->sorted && pcm_thread->merge_sort(
 					(pcm_thread - pcm_thread->thread_id)->rows[0],
 					pcm_thread->rows[pcm_thread->num_rows - 1]
 					);
 		} else {
-			pcm_thread->sorted = pcm_thread->sorted && pcm_thread->sort_x(
+			pcm_thread->sorted = pcm_thread->sorted && pcm_thread->merge_sort(
 					pcm_thread->rows[pcm_thread->num_rows - 1],
 					(pcm_thread + 1)->rows[0]
 					);

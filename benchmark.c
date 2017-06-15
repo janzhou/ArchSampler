@@ -208,11 +208,7 @@ int main(int argc, char *argv[])
 			int sorted = 0;
 			while(!sorted) {
 				sorted = 1;
-				pcm_threads_map(pcm_threads, num_threads, sort_even, amazon_movies_trim_merge);
-				pcm_threads_reduce_opt(pcm_threads, num_threads, sorted, &&, sorted);
-				pcm_threads_map(pcm_threads, num_threads, sort_odd, amazon_movies_trim_merge);
-				pcm_threads_reduce_opt(pcm_threads, num_threads, sorted, &&, sorted);
-				pcm_threads_map(pcm_threads, num_threads, sort_x, amazon_movies_trim_merge);
+				pcm_threads_map(pcm_threads, num_threads, merge_sort, amazon_movies_trim_merge);
 				pcm_threads_reduce_opt(pcm_threads, num_threads, sorted, &&, sorted);
 			}
 

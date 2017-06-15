@@ -32,9 +32,7 @@ struct pcm_thread {
 	int thread_id;
 	int num_threads;
 	pthread_t pthread;
-	int (* sort_odd)(void *left, void *right);
-	int (* sort_even)(void *left, void *right);
-	int (* sort_x)(void *left, void *right);
+	int (* merge_sort)(void *left, void *right);
 	int sorted;
 	unsigned long (* count_fn)(void *row);
 	unsigned long count;
@@ -55,9 +53,7 @@ void pcm_thread_add_row(struct pcm_thread * pth, void * base, int row);
 	for(i = 0; i < num_threads; i++) { \
 		pcm_threads[i].thread_id = i; \
 		pcm_threads[i].num_threads = num_threads; \
-		pcm_threads[i].sort_odd = NULL; \
-		pcm_threads[i].sort_even = NULL; \
-		pcm_threads[i].sort_x = NULL; \
+		pcm_threads[i].merge_sort = NULL; \
 		pcm_threads[i].sorted = 1; \
 		pcm_threads[i].count_fn = NULL; \
 		pcm_threads[i].count_fn = NULL; \
