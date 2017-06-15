@@ -52,6 +52,7 @@ int main(int argc, char *argv[])
 	"-p <repeat>\n"
 	"-s <sample>\n"
 	"-t <num_threads>\n"
+	"-W <word_to_count>\n"
 	"-a <shuffle pattern> (0: Random shuffle, 1: Bank-aware shuffle-1, 2: Bank-aware shuffle-2, 3: No shuffle)\n"
 	"-c contention free threads\n"
 	"-w <workload> 1: amazon_movie; 2: movielens; 3: write; 4: read;\n");
@@ -70,8 +71,9 @@ int main(int argc, char *argv[])
 	void (* count_reduce)(unsigned long local_cnt) = NULL;
 	void (* count_reset)() = NULL;
 	unsigned long (* count_get)() = NULL;
+	char * word_to_count = NULL;
 
-	while ((option = getopt(argc, argv,"a:cs:p:w:")) != -1) {
+	while ((option = getopt(argc, argv,"a:cs:p:w:W:")) != -1) {
 		switch (option) {
 			case 'p' : repeat = atoi(optarg);
 				   break;
@@ -82,7 +84,11 @@ int main(int argc, char *argv[])
 			case 'c' : contention_free_r2t = 1;
 				   break;
 			case 'w' : workload = atoi(optarg);
+				   break;
+			case 'W' : word_to_count = optarg;
+				   break;
 			case 't' : num_threads = atoi(optarg);
+				   break;
 			case '?' :
 			case 0 : break;
 		}
@@ -99,6 +105,7 @@ int main(int argc, char *argv[])
 			count_reduce = amazon_movies_cnt_global;
 			count_reset = amazon_movies_reset_global_cnt;
 			count_map = amazon_movies_cnt_local;
+			amazon_movies_cnt_word(word_to_count);
 			break;
 		case 2:
 			init_mem = pcm_movie_db_init;
