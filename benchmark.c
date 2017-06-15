@@ -257,7 +257,9 @@ int main(int argc, char *argv[])
 
 	if(repeat > 1 && count_get != NULL) {
 		result_avg = result_sum/repeat;
+		int ratio = PCM_NUM_ROWS / sample;
 		printf("result avg/min/max: %u/%u/%u\n", result_avg, result_min, result_max);
+		printf("approx avg/min/max: %u/%u/%u\n", result_avg * ratio, result_min * ratio, result_max * ratio);
 	}
 
 	free(buf);
