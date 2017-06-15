@@ -116,21 +116,34 @@ unsigned long amazon_movies_get_global_cnt()
 	return cnt;
 }
 
+char * word_to_count = NULL;
+void amazon_movies_cnt_word(char *w2c){
+	word_to_count = w2c;
+}
+
 unsigned long amazon_movies_cnt_local(void *row)
 {
-	unsigned long i;
+	unsigned long i, count;
 	struct amazon_movie_review *review = (struct amazon_movie_review *) row;
 	int n_reviews_per_row = PCM_ROW_SIZE / sizeof(struct amazon_movie_review);
 
-	for (i = 0; i < n_reviews_per_row; i++) {
-
-		if (!strcmp(review->product_id, ""))
-			break;
+	for (i = count = 0; i < n_reviews_per_row; i++) {
+		if(word_to_count == NULL) {
+			if (!strcmp(review->product_id, ""))
+				count++;
+		} else {
+			if (
+					strstr(review->profile_name, word_to_count) != NULL ||
+					strstr(review->summary, word_to_count) != NULL ||
+					strstr(review->text, word_to_count) != NULL
+			   )
+				count++;
+		}
 
 		review++;
 	}
 
-	return i;
+	return count;
 }
 
 void amazon_movies_capitalize_text(struct amazon_movie_review *review)

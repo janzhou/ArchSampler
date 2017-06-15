@@ -18,6 +18,7 @@ struct amazon_movie_review
 };
 
 int amazon_movies_init_mem(char *mem);
+void amazon_movies_cnt_word(char *word_to_count);
 unsigned long amazon_movies_cnt_local(void *row);
 void amazon_movies_cnt_global(unsigned long local_cnt);
 unsigned long amazon_movies_get_global_cnt();
