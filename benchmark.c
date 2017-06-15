@@ -27,23 +27,6 @@ void write_fn(void* row) {
 	}
 }
 
-void benchmark_sort(int num_threads)
-{
-	int i;
-	int n = PCM_NUM_ROWS * PCM_ROW_SIZE / sizeof(struct amazon_movie_review_trim);
-
-	// Treat odd-even as one phase
-	n = n / 2;
-
-	for (i = 0; i < n; i++) {
-		pcm_threads_map(pcm_threads, num_threads, sort_even, amazon_movies_trim_merge);
-		pcm_threads_reset_func(pcm_threads, num_threads, sort_even);
-
-		pcm_threads_map(pcm_threads, num_threads - 1, sort_odd, amazon_movies_trim_merge);
-		pcm_threads_reset_func(pcm_threads, num_threads, sort_odd);
-	}
-}
-
 int main(int argc, char *argv[])
 {
 	pcm_param(argc, argv,
@@ -223,7 +206,19 @@ int main(int argc, char *argv[])
 
 		// Sorting
 		if (workload == 6) {
-			benchmark_sort(num_threads);
+			int i;
+			int n = PCM_NUM_ROWS * PCM_ROW_SIZE / sizeof(struct amazon_movie_review_trim);
+
+			// Treat odd-even as one phase
+			n = n / 2;
+
+			for (i = 0; i < n; i++) {
+				pcm_threads_map(pcm_threads, num_threads, sort_even, amazon_movies_trim_merge);
+				pcm_threads_reset_func(pcm_threads, num_threads, sort_even);
+
+				pcm_threads_map(pcm_threads, num_threads - 1, sort_odd, amazon_movies_trim_merge);
+				pcm_threads_reset_func(pcm_threads, num_threads, sort_odd);
+			}
 
 			// Debug
 			int j;
