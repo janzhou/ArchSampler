@@ -172,6 +172,8 @@ unsigned long amazon_movies_trim_avg_rating_local(void *row, float *rating_sum_o
 	unsigned int n_reviews_per_row = PCM_ROW_SIZE / sizeof(*review);
 	unsigned long num_reviews = 0;
 
+	*rating_sum_out = 0;
+
 	for (i = 0; i < n_reviews_per_row; i++) {
 		if (!strcmp(review->product_id, ""))
 			return;
