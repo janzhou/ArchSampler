@@ -164,3 +164,23 @@ int amazon_movies_trim_merge(void *left, void *right)
 
 	return sorted;
 }
+
+unsigned long amazon_movies_trim_avg_rating_local(void *row, float *rating_sum_out)
+{
+	int i;
+	struct amazon_movie_review_trim *review = row;
+	unsigned int n_reviews_per_row = PCM_ROW_SIZE / sizeof(*review);
+	unsigned long num_reviews = 0;
+
+	for (i = 0; i < n_reviews_per_row; i++) {
+		if (!strcmp(review->product_id, ""))
+			return;
+
+		*rating_sum_out += review->score;
+		num_reviews++;
+
+		review++;
+	}
+
+	return num_reviews;
+}
