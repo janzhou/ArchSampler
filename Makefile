@@ -4,7 +4,7 @@ LIBS_PATH= ${SST_ELEMENTS_HOME}/lib/sst-elements-library
 COPS = -g -O0
 LIBS= -fopenmp -lpthread
 
-all: sampling_test.exe benchmark.exe
+all: sampling_test.exe benchmark.exe sort_checker.exe
 
 %.exe: %.o pcm.o movie.o arielapi.o amazon_movies.o amazon_movies_trim.o
 	$(CXX) -o $@ $^ -L$(LIBS_PATH) -I$(INCLUDE_PATH)  $(LIBS) $(COPS)

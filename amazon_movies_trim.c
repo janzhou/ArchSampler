@@ -13,9 +13,7 @@ void amazon_movies_trim_print(struct amazon_movie_review_trim *review)
 		if (!strcmp(review->product_id, ""))
 			return;
 
-		printf("%s::%s::%s::%s::%.1f::%lu\n\n\n",
-				review->product_id, review->user_id, review->profile_name,
-				review->helpfulness, review->score, review->time);
+		printf("%lu\n", review->time);
 
 		review++;
 	}
@@ -138,27 +136,31 @@ void amazon_movies_trim_sort_local(void *row)
 	amazon_movies_trim_quick_sort(review, 0, n - 1);
 }
 
-void amazon_movies_trim_merge(void *left, void *right)
+int amazon_movies_trim_merge(void *left, void *right)
 {
 	struct amazon_movie_review_trim *review_l = left;
 	struct amazon_movie_review_trim *review_r = right;
 
-	int i;
+	int i, sorted = 1;
 	int n = PCM_ROW_SIZE / sizeof(*review_l);
 
 	if (!(left && right))
-		return;
+		return sorted;
 
 	for (i = n - 1; i >= 0; i--) {
 		int j;
 		unsigned long last = review_l[n - 1].time;
 
-		for (j = n - 2; j >= 0 && review_l[j].time > review_r[i].time; j--)
+		for (j = n - 2; j >= 0 && review_l[j].time > review_r[i].time; j--) {
 			review_l[j + 1] = review_l[j];
+		}
 
 		if (j != n - 2 || last > review_r[i].time) {
 			review_l[j + 1] = review_r[i];
 			review_r[i].time = last;
+			sorted = 0;
 		}
 	}
+
+	return sorted;
 }

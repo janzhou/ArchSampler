@@ -57,15 +57,28 @@ void *pcm_thread_func(void *data)
 
 	int i;
 
-	if(pcm_thread->sort_odd != NULL) {
+	if(pcm_thread->merge_sort != NULL) {
 		assert(pcm_thread->num_rows % 2 == 0);
-		for(i = 1; i < pcm_thread->num_rows; i += 2){
-			pcm_thread->sort_odd(pcm_thread->rows[i], pcm_thread->rows[i + 1]);
-		}
-	} else if(pcm_thread->sort_even != NULL){
-		assert(pcm_thread->num_rows % 2 == 0);
+		assert(pcm_thread->num_threads % 2 == 0);
+
 		for(i = 0; i < pcm_thread->num_rows; i += 2){
-			pcm_thread->sort_even(pcm_thread->rows[i], pcm_thread->rows[i + 1]);
+			pcm_thread->sorted = pcm_thread->sorted && pcm_thread->merge_sort(pcm_thread->rows[i], pcm_thread->rows[i + 1]);
+		}
+
+		for(i = 1; i < pcm_thread->num_rows; i += 2){
+			pcm_thread->sorted = pcm_thread->sorted && pcm_thread->merge_sort(pcm_thread->rows[i], pcm_thread->rows[i + 1]);
+		}
+
+		if(pcm_thread->thread_id + 1 == pcm_thread->num_threads) {
+			pcm_thread->sorted = pcm_thread->sorted && pcm_thread->merge_sort(
+					(pcm_thread - pcm_thread->thread_id)->rows[0],
+					pcm_thread->rows[pcm_thread->num_rows - 1]
+					);
+		} else {
+			pcm_thread->sorted = pcm_thread->sorted && pcm_thread->merge_sort(
+					pcm_thread->rows[pcm_thread->num_rows - 1],
+					(pcm_thread + 1)->rows[0]
+					);
 		}
 	} else {
 		for(i = 0; i < pcm_thread->num_rows; i++){
@@ -104,37 +117,6 @@ void pcm_threads_run(struct pcm_thread * pcm_threads, int num_threads){
 void pcm_thread_add_row(struct pcm_thread * pth, void * base, int row) {
     pth->rows[pth->num_rows] = PCM_R2P(base, row);
     pth->num_rows++;
-}
-
-void pcm_threads_map_fn(
-		struct pcm_thread pcm_threads[], int num_threads,
-		void (* fn)(void *row)
-		) {
-	int i;
-	for(i = 0; i < num_threads; i++) {
-		pcm_threads[i].fn = fn;
-	}
-}
-
-void pcm_threads_map_count_fn(
-		struct pcm_thread pcm_threads[], int num_threads,
-		unsigned long (* count_fn)(void *row)
-		) {
-	int i;
-	for(i = 0; i < num_threads; i++) {
-		pcm_threads[i].count_fn = count_fn;
-		pcm_threads[i].count = 0;
-	}
-}
-
-void pcm_threads_reduce_count_fn(
-		struct pcm_thread pcm_threads[], int num_threads,
-		void (* count_reduce)(unsigned long count)
-		){
-	int i;
-	for(i = 0; i < num_threads; i++) {
-		count_reduce(pcm_threads[i].count);
-	}
 }
 
 void pcm_rows_shuffle(int rows[], int num_rows) {
