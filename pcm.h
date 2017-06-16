@@ -36,6 +36,8 @@ struct pcm_thread {
 	int sorted;
 	unsigned long (* count_fn)(void *row);
 	unsigned long count;
+	unsigned long (* count_float_fn)(void *row, float *count_float);
+	float count_float;
 	void (* fn)(void *row);
 	unsigned long long num_rows;
 	void * rows[PCM_ROWS_PER_BANK_MAX];
