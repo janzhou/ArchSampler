@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
 	"-W <word_to_count> only work for -w1\n"
 	"-a <shuffle pattern> (0: Random shuffle, 1: Bank-aware shuffle-1, 2: Bank-aware shuffle-2, 3: No shuffle)\n"
 	"-c contention free threads\n"
-	"-w <workload> 1: amazon_movie; 2: movielens; 3: write; 4: read; 5: amazon_movies_capitalize; 6: amazon_movies_sort\n");
+	"-w <workload> 1: amazon_movie; 2: movielens; 3: write; 4: read; 5: amazon_movies_capitalize; 6: amazon_movies_sort; 7: amazon_movies_average_ratings\n");
 
 	int option;
 	int sample = PCM_NUM_ROWS;
@@ -52,6 +52,7 @@ int main(int argc, char *argv[])
 	void (* count_reduce)(unsigned long local_cnt) = NULL;
 	void (* count_reset)() = NULL;
 	unsigned long (* count_get)() = NULL;
+	unsigned long (* count_float_fn)(void *row, float *count_float);
 	char * word_to_count = NULL;
 
 	while ((option = getopt(argc, argv,"a:cs:p:w:W:")) != -1) {
@@ -106,6 +107,10 @@ int main(int argc, char *argv[])
 			break;
 		case 6: init_mem = amazon_movies_trim_init_mem;
 			fn_map = amazon_movies_trim_sort_local;
+			break;
+		case 7:
+			init_mem = amazon_movies_trim_init_mem;
+			count_float_fn = amazon_movies_trim_avg_rating_local;
 	}
 
 	char *buf;
@@ -199,6 +204,10 @@ int main(int argc, char *argv[])
 			pcm_threads_map(pcm_threads, num_threads, count_fn, count_map);	
 		}
 
+		if (count_float_fn != NULL) {
+			pcm_threads_map(pcm_threads, num_threads, count_float_fn, count_float_fn);
+		}
+
 		if (fn_map != NULL) {
 			pcm_threads_map(pcm_threads, num_threads, fn, fn_map);
 		}
@@ -222,6 +231,17 @@ int main(int argc, char *argv[])
 					amazon_movies_trim_print(review);
 				}
 			}
+		}
+
+		// Average
+		else if (workload == 7) {
+			unsigned long n_elements = 0;
+			float ratings_sum = 0;
+
+			pcm_threads_reduce_opt(pcm_threads, num_threads, n_elements, +, count);
+			pcm_threads_reduce_opt(pcm_threads, num_threads, ratings_sum, +, count_float);
+
+			printf("Average rating: %.2f\n", ratings_sum / n_elements);
 		}
 
 		if(count_reset != NULL) {

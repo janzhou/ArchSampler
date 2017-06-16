@@ -86,6 +86,10 @@ void *pcm_thread_func(void *data)
 				pcm_thread->count += pcm_thread->count_fn(pcm_thread->rows[i]);
 			} else if(pcm_thread->fn != NULL){
 				pcm_thread->fn(pcm_thread->rows[i]);
+			} else if (pcm_thread->count_float_fn != NULL) {
+				float temp_cnt;
+				pcm_thread->count += pcm_thread->count_float_fn(pcm_thread->rows[i], &temp_cnt);
+				pcm_thread->count_float += temp_cnt;
 			}
 		}
 	}
