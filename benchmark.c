@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 	void (* count_reduce)(unsigned long local_cnt) = NULL;
 	void (* count_reset)() = NULL;
 	unsigned long (* count_get)() = NULL;
-	unsigned long (* count_float_fn)(void *row, float *count_float);
+	unsigned long (* count_float_fn)(void *row, float *count_float) = NULL;
 	char * word_to_count = NULL;
 
 	while ((option = getopt(argc, argv,"a:cs:p:w:W:")) != -1) {

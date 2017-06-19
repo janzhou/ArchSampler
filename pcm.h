@@ -58,8 +58,9 @@ void pcm_thread_add_row(struct pcm_thread * pth, void * base, int row);
 		pcm_threads[i].merge_sort = NULL; \
 		pcm_threads[i].sorted = 1; \
 		pcm_threads[i].count_fn = NULL; \
-		pcm_threads[i].count_fn = NULL; \
 		pcm_threads[i].count = 0; \
+		pcm_threads[i].count_float_fn = NULL; \
+		pcm_threads[i].count_float = 0; \
 		pcm_threads[i].fn = NULL; \
 		pcm_threads[i].call_fn = call_ptr; \
 	} \
