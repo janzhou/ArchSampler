@@ -224,7 +224,7 @@ int main(int argc, char *argv[])
 				pcm_threads_map(pcm_threads, num_threads, merge_sort, amazon_movies_trim_merge);
 				pcm_threads_reduce_opt(pcm_threads, num_threads, sorted, &&, sorted);
 			}
-
+#ifdef PCM_DEBUG
 			// Debug
 			int i, j;
 			struct amazon_movie_review_trim *review;
@@ -235,6 +235,7 @@ int main(int argc, char *argv[])
 					amazon_movies_trim_print(review);
 				}
 			}
+#endif
 		}
 
 		// Average
