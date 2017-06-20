@@ -4,6 +4,7 @@
 #include "amazon_movies_trim.h"
 #include "movie.h"
 #include "arielapi.h"
+#include "keycnt.h"
 #include <limits.h>
 #include <assert.h>
 
@@ -37,7 +38,8 @@ int main(int argc, char *argv[])
 	"-W <word_to_count> only work for -w1\n"
 	"-a <shuffle pattern> (0: Random shuffle, 1: Bank-aware shuffle-1, 2: Bank-aware shuffle-2, 3: No shuffle)\n"
 	"-c contention free threads\n"
-	"-w <workload> 1: amazon_movie; 2: movielens; 3: write; 4: read; 5: amazon_movies_capitalize; 6: amazon_movies_sort; 7: amazon_movies_average_ratings\n");
+	"-w <workload> 1: amazon_movie; 2: movielens; 3: write; 4: read; 5: amazon_movies_capitalize;"
+	" 6: amazon_movies_sort; 7: amazon_movies_average_ratings; 8: amazon_movies_with_most_reviews\n");
 
 	int option;
 	int sample = PCM_NUM_ROWS;
@@ -54,6 +56,7 @@ int main(int argc, char *argv[])
 	void (* count_reset)() = NULL;
 	unsigned long (* count_get)() = NULL;
 	unsigned long (* count_float_fn)(void *row, float *count_float) = NULL;
+	void (*cnt_map_fn)(void *row, void **cnt_map_head) = NULL;
 	char * word_to_count = NULL;
 
 	while ((option = getopt(argc, argv,"a:cs:p:w:W:")) != -1) {
@@ -116,6 +119,10 @@ int main(int argc, char *argv[])
 		case 7:
 			init_mem = amazon_movies_trim_init_mem;
 			count_float_fn = amazon_movies_trim_avg_rating_local;
+			break;
+		case 8:
+			init_mem = amazon_movies_trim_init_mem;
+			cnt_map_fn = amazon_movies_trim_movie_cnt_map;
 	}
 
 	char *buf;
@@ -205,6 +212,10 @@ int main(int argc, char *argv[])
 		printf("sampling ratio: %f; load max/avg(%d/%d): %f;\n", (float)sample/PCM_NUM_ROWS, max, sample/PCM_NUM_BANKS, (float)max/(sample/PCM_NUM_BANKS));
 #endif
 
+		if (cnt_map_fn != NULL) {
+			pcm_threads_map(pcm_threads, num_threads, cnt_map_fn, cnt_map_fn);
+		}
+
 		if(count_map != NULL) {
 			pcm_threads_map(pcm_threads, num_threads, count_fn, count_map);	
 		}
@@ -248,6 +259,16 @@ int main(int argc, char *argv[])
 			pcm_threads_reduce_opt(pcm_threads, num_threads, ratings_sum, +, count_float);
 
 			printf("Average rating: %.2f\n", ratings_sum / n_elements);
+		}
+
+		// Most movie reviews
+		else if (workload == 8) {
+			struct keycnt_node *max_review_node, *reduced_list;
+
+			reduced_list = keycnt_pcm_threads_reduce(pcm_threads, num_threads);
+			max_review_node = keycnt_most_reviews(reduced_list);
+
+			printf("%s: %d\n", max_review_node->key, max_review_node->cnt);
 		}
 
 		if(count_reset != NULL) {
