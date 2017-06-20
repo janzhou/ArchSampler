@@ -6,10 +6,15 @@ LIBS= -fopenmp -lpthread
 
 all: sampling_test.exe benchmark.exe sort_checker.exe
 
+define.h:
+	echo "#ifndef _DEFINE_H_" > define.h
+	echo "#define _DEFINE_H_" >> define.h
+	echo "#endif" >> define.h
+
 %.exe: %.o pcm.o movie.o arielapi.o amazon_movies.o amazon_movies_trim.o
 	$(CXX) -o $@ $^ -L$(LIBS_PATH) -I$(INCLUDE_PATH)  $(LIBS) $(COPS)
 
-%.o: %.c pcm.h movie.h arielapi.h amazon_movies.h amazon_movies_trim.h
+%.o: %.c pcm.h movie.h arielapi.h amazon_movies.h amazon_movies_trim.h define.h
 	$(CXX) -o $@ -c $< -L$(LIBS_PATH) -I$(INCLUDE_PATH)  $(LIBS) $(COPS)
 
 clean:

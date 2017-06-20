@@ -1,3 +1,4 @@
+#include "define.h"
 #include "pcm.h"
 #include "amazon_movies.h"
 #include "amazon_movies_trim.h"
