@@ -81,6 +81,9 @@ void *pcm_thread_func(void *data)
 					);
 		}
 	} else {
+		// Required in case of repeated sampling (-p<x> option)
+		pcm_thread->cnt_map_head = NULL;
+
 		for(i = 0; i < pcm_thread->num_rows; i++){
 			if(pcm_thread->count_fn != NULL){
 				pcm_thread->count += pcm_thread->count_fn(pcm_thread->rows[i]);
@@ -90,6 +93,8 @@ void *pcm_thread_func(void *data)
 				float temp_cnt;
 				pcm_thread->count += pcm_thread->count_float_fn(pcm_thread->rows[i], &temp_cnt);
 				pcm_thread->count_float += temp_cnt;
+			} else if (pcm_thread->cnt_map_fn != NULL) {
+				pcm_thread->cnt_map_fn(pcm_thread->rows[i], &pcm_thread->cnt_map_head);
 			}
 		}
 	}

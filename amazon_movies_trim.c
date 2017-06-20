@@ -1,5 +1,6 @@
 #include "pcm.h"
 #include "amazon_movies_trim.h"
+#include "keycnt.h"
 
 //#define AMAZON_MOVIES_TRIM_DEBUG
 
@@ -185,4 +186,18 @@ unsigned long amazon_movies_trim_avg_rating_local(void *row, float *rating_sum_o
 	}
 
 	return num_reviews;
+}
+
+void amazon_movies_trim_movie_cnt_map(void *row, void **keycnt_head)
+{
+	int i;
+	struct amazon_movie_review_trim *review = row;
+	unsigned int n_reviews_per_row = PCM_ROW_SIZE / sizeof(*review);
+
+	for (i = 0; i < n_reviews_per_row; i++) {
+		if (!strcmp(review->product_id, ""))
+			continue;
+		keycnt_add((struct keycnt_node **) keycnt_head, review->product_id, 1);
+		review++;
+	}
 }

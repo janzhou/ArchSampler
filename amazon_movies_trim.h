@@ -19,5 +19,6 @@ int amazon_movies_trim_init_mem(char *mem);
 void amazon_movies_trim_sort_local(void *row);
 int amazon_movies_trim_merge(void *left, void *right);
 unsigned long amazon_movies_trim_avg_rating_local(void *row, float *rating_sum_out);
+void amazon_movies_trim_movie_cnt_map(void *row, void **keycnt_head);
 
 #endif /* AMAZON_MOVIES_TRIM_H_ */
