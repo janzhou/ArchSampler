@@ -1,3 +1,4 @@
+#include "define.h"
 #include "pcm.h"
 #include "amazon_movies.h"
 #include "amazon_movies_trim.h"
@@ -85,7 +86,11 @@ int main(int argc, char *argv[])
 	switch(workload) {
 		default:
 		case 1:
-			init_mem = amazon_movies_init_mem;
+            if(word_to_count == NULL) {
+                init_mem = amazon_movies_init_mem;
+            } else {
+                init_mem = amazon_movies_init_mem_raw;
+            }
 			count_get = amazon_movies_get_global_cnt;
 			count_reduce = amazon_movies_cnt_global;
 			count_reset = amazon_movies_reset_global_cnt;

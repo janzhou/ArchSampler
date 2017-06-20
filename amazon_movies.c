@@ -6,6 +6,28 @@ unsigned long n_elements;
 
 //#define AMAZON_MOVIES_DEBUG
 
+int amazon_movies_init_mem_raw(char *mem) {
+    if (!mem)
+        return -ENOMEM;
+
+	char *file = "data/movies.txt";
+    FILE *fp = fopen(file, "r");
+    if (!fp) {
+        perror("Unable to open input file");
+        return errno;
+    }
+
+    int j;
+	for (j = 0; j < PCM_NUM_ROWS; j++) {
+        char *row = PCM_R2P(mem, j);
+        fread(row, PCM_ROW_SIZE - 1, 1, fp);
+        row[PCM_ROW_SIZE - 1] = '\0';
+    }
+
+    fclose(fp);
+    return 0;
+}
+
 int amazon_movies_init_mem(char *mem)
 {
 	int i, j;	
@@ -123,27 +145,28 @@ void amazon_movies_cnt_word(char *w2c){
 
 unsigned long amazon_movies_cnt_local(void *row)
 {
-	unsigned long i, count;
-	struct amazon_movie_review *review = (struct amazon_movie_review *) row;
-	int n_reviews_per_row = PCM_ROW_SIZE / sizeof(struct amazon_movie_review);
+	unsigned long count = 0;
 
-	for (i = count = 0; i < n_reviews_per_row; i++) {
-		if(word_to_count == NULL) {
-			if (!strcmp(review->product_id, ""))
-				count++;
-		} else {
-			if (
-					strstr(review->profile_name, word_to_count) != NULL ||
-					strstr(review->summary, word_to_count) != NULL ||
-					strstr(review->text, word_to_count) != NULL
-			   )
-				count++;
-		}
+    if(word_to_count == NULL) {
+        struct amazon_movie_review *review = (struct amazon_movie_review *) row;
+        int n_reviews_per_row = PCM_ROW_SIZE / sizeof(struct amazon_movie_review);
+        unsigned long i;
+        for (i = count = 0; i < n_reviews_per_row; i++) {
+            if (!strcmp(review->product_id, ""))
+                count++;
+            review++;
+        }
+    } else {
+        char * start = (char *) row;
+        char * match = NULL;
+        int sizeW = strlen(word_to_count);
+        while((match = strstr(start, word_to_count)) != NULL && *start != '\0') {
+            start = match + sizeW;
+            count++;
+        }
+    }
 
-		review++;
-	}
-
-	return count;
+    return count;
 }
 
 void amazon_movies_capitalize_text(struct amazon_movie_review *review)

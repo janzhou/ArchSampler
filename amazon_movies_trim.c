@@ -11,8 +11,10 @@ void amazon_movies_trim_print(struct amazon_movie_review_trim *review)
 
 	for (i = 0; i < n_reviews_per_row; i++) {
 
-		if (!strcmp(review->product_id, ""))
-			return;
+		// if (!strcmp(review->product_id, "")) {
+		// 	printf("review->product_id == \"\"\n");
+		// 	return;
+		// }
 
 		printf("%lu\n", review->time);
 
