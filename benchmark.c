@@ -3,6 +3,7 @@
 #include "amazon_movies_trim.h"
 #include "movie.h"
 #include "arielapi.h"
+#include "keycnt.h"
 #include <limits.h>
 #include <assert.h>
 
@@ -253,6 +254,16 @@ int main(int argc, char *argv[])
 			pcm_threads_reduce_opt(pcm_threads, num_threads, ratings_sum, +, count_float);
 
 			printf("Average rating: %.2f\n", ratings_sum / n_elements);
+		}
+
+		// Most movie reviews
+		else if (workload == 8) {
+			struct keycnt_node *max_review_node, *reduced_list;
+
+			reduced_list = keycnt_pcm_threads_reduce(pcm_threads, num_threads);
+			max_review_node = keycnt_most_reviews(reduced_list);
+
+			printf("%s: %d\n", max_review_node->key, max_review_node->cnt);
 		}
 
 		if(count_reset != NULL) {
