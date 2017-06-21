@@ -194,10 +194,9 @@ void amazon_movies_trim_movie_cnt_map(void *row, void **keycnt_head)
 	struct amazon_movie_review_trim *review = row;
 	unsigned int n_reviews_per_row = PCM_ROW_SIZE / sizeof(*review);
 
-	for (i = 0; i < n_reviews_per_row; i++) {
+	for (i = 0; i < n_reviews_per_row; i++, review++) {
 		if (!strcmp(review->product_id, ""))
 			continue;
 		keycnt_add((struct keycnt_node **) keycnt_head, review->product_id, 1);
-		review++;
 	}
 }
