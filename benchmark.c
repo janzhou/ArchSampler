@@ -29,29 +29,29 @@ void write_fn(void* row) {
 	}
 }
 
-int smallest(unsigned int arr[],int k,int n) {
- int pos=k,small=arr[k],i;
- for(i=k+1;i<n;i++)
- {
-  if(arr[i]<small)
-  {
-   small=arr[i];
-   pos=i;
-  }
- }
- return pos;
-}
+#define smallest(arr, k, n) ({ \
+ int pos=k,small=arr[k],i; \
+ for(i=k+1;i<n;i++) \
+ { \
+  if(arr[i]<small) \
+  { \
+   small=arr[i]; \
+   pos=i; \
+  } \
+ } \
+ pos; \
+})
 
 
-void sort(unsigned int arr[],int n) {
- int k,pos,temp;
- for(k=0 ; k < n ; k++)
-  {
-   pos=smallest(arr,k,n);
-   temp=arr[k];
-   arr[k]=arr[pos];
-   arr[pos]=temp;
-  }
+#define sort(arr, n) { \
+ int k,pos,temp; \
+ for(k=0 ; k < n ; k++) \
+  { \
+   pos = smallest(arr,k,n); \
+   temp=arr[k]; \
+   arr[k]=arr[pos]; \
+   arr[pos]=temp; \
+  } \
 }
 
 int main(int argc, char *argv[])
@@ -211,6 +211,7 @@ int main(int argc, char *argv[])
 	ariel_enable();
 
 	unsigned int results[repeat], repeat_loop, result_sum = 0, result_avg, result_min = UINT_MAX, result_max = 0;
+	float avg[repeat], avg_sum = 0, avg_avg, avg_min, avg_max;
 	for(repeat_loop = 0; repeat_loop < repeat; repeat_loop++){
 		int skip = sample * repeat_loop;
 		if(contention_free_r2t == 0) {
@@ -282,8 +283,9 @@ int main(int argc, char *argv[])
 
 			pcm_threads_reduce_opt(pcm_threads, num_threads, n_elements, +, count);
 			pcm_threads_reduce_opt(pcm_threads, num_threads, ratings_sum, +, count_float);
-
-			printf("Average rating: %.2f\n", ratings_sum / n_elements);
+			avg[repeat_loop] = ratings_sum / n_elements;
+			avg_sum += avg[repeat_loop];
+			printf("Average rating: %.2f\n", avg[repeat_loop]);
 		}
 
 		// Most movie reviews
@@ -320,6 +322,13 @@ int main(int argc, char *argv[])
 		int ratio = PCM_NUM_ROWS / sample;
 		printf("result min/avg/max: %u %u %u\n", result_min, result_avg, result_max);
 		printf("approx min/avg/max: %u %u %u\n", result_min * ratio, result_avg * ratio, result_max * ratio);
+	} else if ( repeat > 1 && workload == 7) {
+		sort(avg, repeat);
+		avg_avg = avg_sum/repeat;
+		avg_min = avg[repeat * 2 / 10];
+		avg_max = avg[repeat * 8 / 10];
+		printf("approx min/avg/max: %f %f %f\n", avg_min, avg_avg, avg_max);
+	
 	}
 
 	free(buf);
