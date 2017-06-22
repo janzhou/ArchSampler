@@ -74,6 +74,8 @@ int amazon_movies_trim_init_mem(char *mem)
 
 			review++;
 		}
+		if (!strcmp(review->product_id, ""))
+			j--;
 	}
 
 	free (buff);
