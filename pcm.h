@@ -86,7 +86,7 @@ void pcm_thread_add_row(struct pcm_thread * pth, void * base, int row);
 }
 
 void pcm_threads_run(struct pcm_thread pcm_threads[], int num_threads);
-void pcm_rows_shuffle(int rows[], int num_rows);
+void pcm_rows_shuffle(int rows[], int num_rows, int start);
 void pcm_rows_bank_aware_shuffle(int rows[], int num_rows);
 void pcm_rows_bank_aware_shuffle2(int rows[], int num_rows);
 

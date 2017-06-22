@@ -128,10 +128,10 @@ void pcm_thread_add_row(struct pcm_thread * pth, void * base, int row) {
     pth->num_rows++;
 }
 
-void pcm_rows_shuffle(int rows[], int num_rows) {
+void pcm_rows_shuffle(int rows[], int num_rows, int start) {
 	int r;
 	srand(time(NULL));
-	for(r = 0; r < num_rows; r++) {
+	for(r = start; r < num_rows; r++) {
 		int swap = rand() % num_rows;
 		int tmp = rows[r];
 		rows[r] = rows[swap];

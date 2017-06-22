@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	if(bank_aware_shuffle == 0) {
-		pcm_rows_shuffle(rows, PCM_NUM_ROWS);
+		pcm_rows_shuffle(rows, PCM_NUM_ROWS, PCM_NUM_ROWS - 1 - sample);
 	} else {
 		pcm_rows_bank_aware_shuffle(rows, PCM_NUM_ROWS);
 	}

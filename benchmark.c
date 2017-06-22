@@ -29,6 +29,31 @@ void write_fn(void* row) {
 	}
 }
 
+int smallest(unsigned int arr[],int k,int n) {
+ int pos=k,small=arr[k],i;
+ for(i=k+1;i<n;i++)
+ {
+  if(arr[i]<small)
+  {
+   small=arr[i];
+   pos=i;
+  }
+ }
+ return pos;
+}
+
+
+void sort(unsigned int arr[],int n) {
+ int k,pos,temp;
+ for(k=0 ; k < n ; k++)
+  {
+   pos=smallest(arr,k,n);
+   temp=arr[k];
+   arr[k]=arr[pos];
+   arr[pos]=temp;
+  }
+}
+
 int main(int argc, char *argv[])
 {
 	pcm_param(argc, argv,
@@ -160,6 +185,8 @@ int main(int argc, char *argv[])
 			return errno;
 	}
 
+	assert(sample * repeat <= PCM_NUM_ROWS);
+
 	switch (bank_aware_shuffle) {
 		case 3:
 			break;
@@ -172,12 +199,10 @@ int main(int argc, char *argv[])
 			break;
 
 		case 0:
-		default: pcm_rows_shuffle(rows, PCM_NUM_ROWS);
+		default: pcm_rows_shuffle(rows, PCM_NUM_ROWS, PCM_NUM_ROWS - sample * repeat);
 			printf("Random Shuffle\n");
 			break;
 	}
-
-	assert(sample * repeat <= PCM_NUM_ROWS);
 
 #ifdef PCM_DEBUG
 	pcm_print_row_shuffle(rows);
@@ -282,18 +307,19 @@ int main(int argc, char *argv[])
 		if(count_get != NULL) {
 			unsigned int result = (*count_get)();
 			result_sum += result;
-			result_min = result_min <= result ? result_min : result;
-			result_max = result_max >= result ? result_max : result;
 			results[repeat_loop] = result;
 			printf("count: %u\n", result);
 		}
 	}
 
 	if(repeat > 1 && count_get != NULL) {
+		sort(results, repeat);
 		result_avg = result_sum/repeat;
+		result_min = results[repeat * 2 / 10];
+		result_max = results[repeat * 8 / 10];
 		int ratio = PCM_NUM_ROWS / sample;
-		printf("result avg/min/max: %u/%u/%u\n", result_avg, result_min, result_max);
-		printf("approx avg/min/max: %u/%u/%u\n", result_avg * ratio, result_min * ratio, result_max * ratio);
+		printf("result min/avg/max: %u %u %u\n", result_min, result_avg, result_max);
+		printf("approx min/avg/max: %u %u %u\n", result_min * ratio, result_avg * ratio, result_max * ratio);
 	}
 
 	free(buf);
