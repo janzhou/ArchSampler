@@ -29,8 +29,8 @@ void write_fn(void* row) {
 	}
 }
 
-#define smallest(arr, k, n) ({ \
- int pos=k,small=arr[k],i; \
+#define smallest(t,arr, k, n) ({ \
+ int pos=k,i; t small=arr[k]; \
  for(i=k+1;i<n;i++) \
  { \
   if(arr[i]<small) \
@@ -43,11 +43,11 @@ void write_fn(void* row) {
 })
 
 
-#define sort(arr, n) { \
- int k,pos,temp; \
+#define sort(t,arr, n) { \
+ int k,pos; t temp; \
  for(k=0 ; k < n ; k++) \
   { \
-   pos = smallest(arr,k,n); \
+   pos = smallest(t,arr,k,n); \
    temp=arr[k]; \
    arr[k]=arr[pos]; \
    arr[pos]=temp; \
@@ -315,7 +315,7 @@ int main(int argc, char *argv[])
 	}
 
 	if(repeat > 1 && count_get != NULL) {
-		sort(results, repeat);
+		sort(int, results, repeat);
 		result_avg = result_sum/repeat;
 		result_min = results[repeat * 2 / 10];
 		result_max = results[repeat * 8 / 10];
@@ -323,7 +323,7 @@ int main(int argc, char *argv[])
 		printf("result min/avg/max: %u %u %u\n", result_min, result_avg, result_max);
 		printf("approx min/avg/max: %u %u %u\n", result_min * ratio, result_avg * ratio, result_max * ratio);
 	} else if ( repeat > 1 && workload == 7) {
-		sort(avg, repeat);
+		sort(float, avg, repeat);
 		avg_avg = avg_sum/repeat;
 		avg_min = avg[repeat * 2 / 10];
 		avg_max = avg[repeat * 8 / 10];
