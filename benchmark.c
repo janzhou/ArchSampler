@@ -285,7 +285,7 @@ int main(int argc, char *argv[])
 			pcm_threads_reduce_opt(pcm_threads, num_threads, ratings_sum, +, count_float);
 			avg[repeat_loop] = ratings_sum / n_elements;
 			avg_sum += avg[repeat_loop];
-			printf("Average rating: %.2f\n", avg[repeat_loop]);
+			printf("Average rating: %f\n", avg[repeat_loop]);
 		}
 
 		// Most movie reviews
