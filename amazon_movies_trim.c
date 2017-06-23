@@ -1,6 +1,7 @@
 #include "pcm.h"
 #include "amazon_movies_trim.h"
 #include "keycnt.h"
+#include <string.h>
 
 //#define AMAZON_MOVIES_TRIM_DEBUG
 
@@ -47,6 +48,11 @@ int amazon_movies_trim_init_mem(char *mem)
 		for (i = 0; i < n_reviews_per_row; i++) {
 
 			getline(&buff, &len, fp);
+            char prod[] = "product/productId: ";
+            if(0 != strncmp(buff, prod, strlen(prod))) {
+                i--;
+                continue;
+            }
 			sscanf(buff, "product/productId: %[^\n]s", review->product_id);
 
 			getline(&buff, &len, fp);
@@ -64,18 +70,15 @@ int amazon_movies_trim_init_mem(char *mem)
 			getline(&buff, &len, fp);
 			sscanf(buff, "review/time: %lu\n", &review->time);
 
-			/* Ignore the summary, review text and the new line from the record */
-			getline(&buff, &len, fp);
-			getline(&buff, &len, fp);
-			getline(&buff, &len, fp);
-
 			if (feof(fp))
 				break;
 
-			review++;
-		}
-		if (!strcmp(review->product_id, ""))
-			j--;
+            if (review->score <= 0) {
+                i--;
+                continue;
+            }
+            review++;
+        }
 	}
 
 	free (buff);
