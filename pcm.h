@@ -87,6 +87,7 @@ void pcm_thread_add_row(struct pcm_thread * pth, void * base, int row);
 
 void pcm_threads_run(struct pcm_thread pcm_threads[], int num_threads);
 void pcm_rows_shuffle(int rows[], int num_rows, int start);
+void pcm_rows_shuffle_random(int rows[], int num_rows, int start);
 void pcm_rows_bank_aware_shuffle(int rows[], int num_rows);
 void pcm_rows_bank_aware_shuffle2(int rows[], int num_rows);
 
@@ -94,7 +95,7 @@ void pcm_rows_bank_aware_shuffle2(int rows[], int num_rows);
 void pcm_r2t_contention_free(struct pcm_thread pths[], int num_threads, int rows[], int num_rows, void * buf);
 void pcm_r2t_even_split(struct pcm_thread pths[], int num_threads, int rows[], int num_rows, void * buf);
 
-void pcm_print_row_shuffle(int rows[]);
+void pcm_print_row_shuffle(int rows[], int num_rows);
 
 
 #endif /* PCM_H_ */

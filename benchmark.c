@@ -188,6 +188,9 @@ int main(int argc, char *argv[])
 	assert(sample * repeat <= PCM_NUM_ROWS);
 
 	switch (bank_aware_shuffle) {
+		case 4: pcm_rows_shuffle_random(rows, PCM_NUM_ROWS, PCM_NUM_ROWS - sample * repeat);
+			printf("Random Shuffle-2\n");
+			break;
 		case 3:
 			break;
 		case 2: pcm_rows_bank_aware_shuffle2(rows, PCM_NUM_ROWS);
@@ -205,7 +208,11 @@ int main(int argc, char *argv[])
 	}
 
 #ifdef PCM_DEBUG
-	pcm_print_row_shuffle(rows);
+	{
+		int size = sample * repeat;
+		int start = PCM_NUM_ROWS - size;
+		pcm_print_row_shuffle(rows + start, size);
+	}
 #endif
 
 	ariel_enable();

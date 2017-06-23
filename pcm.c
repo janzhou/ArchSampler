@@ -139,6 +139,43 @@ void pcm_rows_shuffle(int rows[], int num_rows, int start) {
 	}
 }
 
+void pcm_rows_shuffle_random(int rows[], int num_rows, int start) {
+	int r;
+	srand(time(NULL));
+	int b[PCM_NUM_BANKS];
+	int rand_sum = 0;
+	int rand_sum2 = 0;
+	int pick = num_rows - start;
+	for(r = 0; r < PCM_NUM_BANKS; r++) {
+		b[r] = rand() % num_rows;
+		rand_sum += b[r];
+	}
+	for(r = 0; r < PCM_NUM_BANKS; r++) {
+		b[r] = b[r] * pick / rand_sum;
+		rand_sum2 += b[r];
+	}
+
+	b[PCM_NUM_BANKS - 1] += (pick - rand_sum2);
+
+	int pick_rows[pick], b_pick, r_pick;
+	for(b_pick = 0, r_pick = 0; b_pick < PCM_NUM_BANKS; b_pick++) {
+		for(r = 0; r < b[b_pick]; r++) {
+			int p = rand() % PCM_ROWS_PER_BANK * PCM_NUM_BANKS + b_pick;
+			if(rows[p] >= 0){
+				pick_rows[r_pick] = p;
+				r_pick++;
+				rows[p] = -1;
+			} else {
+				r--;
+			}
+		}
+	}
+	for(r_pick = 0, r = start; r_pick < pick; r_pick++, r++) {
+		rows[r] = pick_rows[r_pick];
+	}
+	pcm_rows_shuffle(rows + start, pick, 0);
+}
+
 void pcm_rows_bank_aware_shuffle(int rows[], int num_rows) {
 	int r;
 	srand(time(NULL));
@@ -199,11 +236,11 @@ void pcm_r2t_even_split(struct pcm_thread pths[], int num_threads, int rows[], i
 	}
 }
 
-void pcm_print_row_shuffle(int rows[])
+void pcm_print_row_shuffle(int rows[], int num_rows)
 {
 	int r;
 
-	for (r = 0; r < PCM_NUM_ROWS; r++)
+	for (r = 0; r < num_rows; r++)
 		fprintf(stderr, "row[%d]: %d (%d->%d)\n", r, rows[r], r % PCM_NUM_BANKS, rows[r] % PCM_NUM_BANKS);
 }
 
