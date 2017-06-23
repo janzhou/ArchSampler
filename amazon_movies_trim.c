@@ -1,9 +1,8 @@
+#include "define.h"
 #include "pcm.h"
 #include "amazon_movies_trim.h"
 #include "keycnt.h"
 #include <string.h>
-
-//#define AMAZON_MOVIES_TRIM_DEBUG
 
 void amazon_movies_trim_print(struct amazon_movie_review_trim *review)
 {

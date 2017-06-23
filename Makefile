@@ -9,6 +9,9 @@ all: sampling_test.exe benchmark.exe sort_checker.exe
 define.h:
 	echo "#ifndef _DEFINE_H_" > define.h
 	echo "#define _DEFINE_H_" >> define.h
+	echo "//#define PCM_DEBUG" >> define.h
+	echo "//#define AMAZON_MOVIES_DEBUG" >> define.h
+	echo "//#define AMAZON_MOVIES_TRIM_DEBUG" >> define.h
 	echo "#endif" >> define.h
 
 %.exe: %.o pcm.o movie.o arielapi.o amazon_movies.o amazon_movies_trim.o keycnt.o
@@ -18,4 +21,4 @@ define.h:
 	$(CXX) -o $@ -c $< -L$(LIBS_PATH) -I$(INCLUDE_PATH)  $(LIBS) $(COPS)
 
 clean:
-	rm -f *.exe *.o
+	rm -f *.exe *.o define.h

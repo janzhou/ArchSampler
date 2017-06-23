@@ -1,10 +1,9 @@
+#include "define.h"
 #include "pcm.h"
 #include "amazon_movies.h"
 
 sem_t n_ele_lock;
 unsigned long n_elements;
-
-//#define AMAZON_MOVIES_DEBUG
 
 int amazon_movies_init_mem_raw(char *mem) {
     if (!mem)
