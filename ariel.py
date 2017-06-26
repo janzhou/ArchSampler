@@ -9,7 +9,7 @@ num_banks = int(sys.argv[2])
 num_rows = int(sys.argv[3])
 opts = map((lambda x: "-" + x), sys.argv[4].split("-"))
 
-max_outstanding = num_banks
+max_outstanding = sys.argv[5]
 next_core_id = 0
 next_network_id = 0
 next_memory_ctrl_id = 0
@@ -444,7 +444,7 @@ sst.enableAllStatisticsForAllComponents({"type":"sst.AccumulatorStatistic"})
 
 sst.setStatisticOutput("sst.statOutputCSV")
 sst.setStatisticOutputOptions( {
-	"filepath"  : "STATS/"+str(exe) + "-b" + str(num_banks) + "-r" + str(num_rows) + "".join(opts) + ".csv",
+	"filepath"  : "STATS/"+str(exe) + "-b" + str(num_banks) + "-r" + str(num_rows) + "".join(opts) + "-o" + str(max_outstanding) + ".csv",
 	"separator" : ", "
 } )
 
