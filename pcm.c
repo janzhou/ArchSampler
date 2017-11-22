@@ -112,11 +112,13 @@ void pcm_threads_run(struct pcm_thread * pcm_threads, int num_threads){
 			pcm_thread_func(pcm_threads + i);
 		}
 	} else {
-		for(i = 0; i < num_threads; i++){
+		for(i = 0; i < num_threads - 1; i++){
 			struct pcm_thread * pth = pcm_threads + i;
 			pthread_create(&pth->pthread, NULL, pcm_thread_func, pth);
 		}
-		for (i = 0; i < num_threads; i++) {
+		struct pcm_thread * pth = pcm_threads + i;
+		pcm_thread_func(pth);
+		for (i = 0; i < num_threads - 1; i++) {
 			struct pcm_thread * pth = pcm_threads + i;
 			pthread_join(pth->pthread, NULL);
 		}
