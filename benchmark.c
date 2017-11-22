@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 	void (*cnt_map_fn)(void *row, void **cnt_map_head) = NULL;
 	char * word_to_count = NULL;
 
-	while ((option = getopt(argc, argv,"a:cs:p:w:W:")) != -1) {
+	while ((option = getopt(argc, argv,"a:cs:p:w:Wt:")) != -1) {
 		switch (option) {
 			case 'p' : repeat = atoi(optarg);
 				   break;
@@ -250,7 +250,7 @@ int main(int argc, char *argv[])
 		}
 
 		if(count_map != NULL) {
-			pcm_threads_map(pcm_threads, num_threads, count_fn, count_map);	
+			pcm_threads_map(pcm_threads, num_threads, count_fn, count_map);
 		}
 
 		if (count_float_fn != NULL) {
@@ -335,7 +335,7 @@ int main(int argc, char *argv[])
 		avg_min = avg[repeat * 2 / 10];
 		avg_max = avg[repeat * 8 / 10];
 		printf("approx min/avg/max: %f %f %f\n", avg_min, avg_avg, avg_max);
-	
+
 	}
 
 	free(buf);
